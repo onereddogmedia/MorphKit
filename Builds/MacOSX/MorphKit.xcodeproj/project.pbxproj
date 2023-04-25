@@ -1,0 +1,714 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 50;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		D020F2DE29F7A54B00D2CECB /* pffft.c in Sources */ = {isa = PBXBuildFile; fileRef = D020F2DC29F7A54B00D2CECB /* pffft.c */; };
+		D020F2DF29F7A54B00D2CECB /* pffft.h in Headers */ = {isa = PBXBuildFile; fileRef = D020F2DD29F7A54B00D2CECB /* pffft.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D020F2E129F7A55200D2CECB /* fixed_capacity_vector.h in Headers */ = {isa = PBXBuildFile; fileRef = D020F2E029F7A55200D2CECB /* fixed_capacity_vector.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D026D13A27536FC10045CFD3 /* SMAudio.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D026D0D827536FC10045CFD3 /* SMAudio.cpp */; };
+		D026D13B27536FC10045CFD3 /* SMMorphSourceModule.h in Headers */ = {isa = PBXBuildFile; fileRef = D026D0D927536FC10045CFD3 /* SMMorphSourceModule.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D026D13C27536FC10045CFD3 /* SMMorphPlanSynth.h in Headers */ = {isa = PBXBuildFile; fileRef = D026D0DA27536FC10045CFD3 /* SMMorphPlanSynth.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D026D13D27536FC10045CFD3 /* SMNoiseBandPartition.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D026D0DB27536FC10045CFD3 /* SMNoiseBandPartition.cpp */; };
+		D026D13E27536FC10045CFD3 /* SMStdioSubIn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D026D0DC27536FC10045CFD3 /* SMStdioSubIn.cpp */; };
+		D026D13F27536FC10045CFD3 /* SMLiveDecoder.h in Headers */ = {isa = PBXBuildFile; fileRef = D026D0DD27536FC10045CFD3 /* SMLiveDecoder.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D026D14027536FC10045CFD3 /* SMAudioTool.h in Headers */ = {isa = PBXBuildFile; fileRef = D026D0DE27536FC10045CFD3 /* SMAudioTool.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D026D14127536FC10045CFD3 /* SMPcg32rng.h in Headers */ = {isa = PBXBuildFile; fileRef = D026D0DF27536FC10045CFD3 /* SMPcg32rng.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D026D14227536FC10045CFD3 /* SMLeakDebugger.h in Headers */ = {isa = PBXBuildFile; fileRef = D026D0E027536FC10045CFD3 /* SMLeakDebugger.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D026D14327536FC10045CFD3 /* SMSynthInterface.h in Headers */ = {isa = PBXBuildFile; fileRef = D026D0E127536FC10045CFD3 /* SMSynthInterface.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D026D14427536FC10045CFD3 /* SMWavData.h in Headers */ = {isa = PBXBuildFile; fileRef = D026D0E227536FC10045CFD3 /* SMWavData.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D026D14527536FC10045CFD3 /* SMMorphSource.h in Headers */ = {isa = PBXBuildFile; fileRef = D026D0E327536FC10045CFD3 /* SMMorphSource.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D026D14627536FC10045CFD3 /* SMSineDecoder.h in Headers */ = {isa = PBXBuildFile; fileRef = D026D0E427536FC10045CFD3 /* SMSineDecoder.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D026D14727536FC10045CFD3 /* SMLiveDecoderSource.h in Headers */ = {isa = PBXBuildFile; fileRef = D026D0E527536FC10045CFD3 /* SMLiveDecoderSource.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D026D14827536FC10045CFD3 /* SMAlignedArray.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D026D0E627536FC10045CFD3 /* SMAlignedArray.cpp */; };
+		D026D14B27536FC10045CFD3 /* glib.h in Headers */ = {isa = PBXBuildFile; fileRef = D026D0E927536FC10045CFD3 /* glib.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D026D14C27536FC10045CFD3 /* SMAudioTool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D026D0EA27536FC10045CFD3 /* SMAudioTool.cpp */; };
+		D026D14D27536FC10045CFD3 /* SMObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D026D0EB27536FC10045CFD3 /* SMObject.cpp */; };
+		D026D14E27536FC10045CFD3 /* SMStdioOut.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D026D0EC27536FC10045CFD3 /* SMStdioOut.cpp */; };
+		D026D14F27536FC10045CFD3 /* SMInFile.h in Headers */ = {isa = PBXBuildFile; fileRef = D026D0ED27536FC10045CFD3 /* SMInFile.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D026D15027536FC10045CFD3 /* SMMorphOutput.h in Headers */ = {isa = PBXBuildFile; fileRef = D026D0EE27536FC10045CFD3 /* SMMorphOutput.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D026D15127536FC10045CFD3 /* SMRandom.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D026D0EF27536FC10045CFD3 /* SMRandom.cpp */; };
+		D026D15227536FC10045CFD3 /* SMRandom.h in Headers */ = {isa = PBXBuildFile; fileRef = D026D0F027536FC10045CFD3 /* SMRandom.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D026D15327536FC10045CFD3 /* SMAlignedArray.h in Headers */ = {isa = PBXBuildFile; fileRef = D026D0F127536FC10045CFD3 /* SMAlignedArray.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D026D15427536FC10045CFD3 /* SMWavData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D026D0F227536FC10045CFD3 /* SMWavData.cpp */; };
+		D026D15527536FC10045CFD3 /* SMWavSet.h in Headers */ = {isa = PBXBuildFile; fileRef = D026D0F327536FC10045CFD3 /* SMWavSet.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D026D15627536FC10045CFD3 /* SMEffectDecoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D026D0F427536FC10045CFD3 /* SMEffectDecoder.cpp */; };
+		D026D15727536FC10045CFD3 /* SMStdioIn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D026D0F527536FC10045CFD3 /* SMStdioIn.cpp */; };
+		D026D15827536FC10045CFD3 /* SMMorphPlan.h in Headers */ = {isa = PBXBuildFile; fileRef = D026D0F627536FC10045CFD3 /* SMMorphPlan.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D026D15927536FC10045CFD3 /* SMWavSetRepo.h in Headers */ = {isa = PBXBuildFile; fileRef = D026D0F727536FC10045CFD3 /* SMWavSetRepo.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D026D15A27536FC10045CFD3 /* SMMorphPlanSynth.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D026D0F827536FC10045CFD3 /* SMMorphPlanSynth.cpp */; };
+		D026D15B27536FC10045CFD3 /* SMEffectDecoder.h in Headers */ = {isa = PBXBuildFile; fileRef = D026D0F927536FC10045CFD3 /* SMEffectDecoder.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D026D15C27536FC10045CFD3 /* SMMorphOperator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D026D0FA27536FC10045CFD3 /* SMMorphOperator.cpp */; };
+		D026D15D27536FC10045CFD3 /* SMProject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D026D0FB27536FC10045CFD3 /* SMProject.cpp */; };
+		D026D15E27536FC10045CFD3 /* SMMath.h in Headers */ = {isa = PBXBuildFile; fileRef = D026D0FC27536FC10045CFD3 /* SMMath.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D026D16027536FC10045CFD3 /* SMMorphUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D026D0FE27536FC10045CFD3 /* SMMorphUtils.cpp */; };
+		D026D16127536FC10045CFD3 /* SMPolyPhaseInter.h in Headers */ = {isa = PBXBuildFile; fileRef = D026D0FF27536FC10045CFD3 /* SMPolyPhaseInter.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D026D16227536FC10045CFD3 /* SMMorphPlan.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D026D10027536FC10045CFD3 /* SMMorphPlan.cpp */; };
+		D026D16327536FC10045CFD3 /* SMObject.h in Headers */ = {isa = PBXBuildFile; fileRef = D026D10127536FC10045CFD3 /* SMObject.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D026D16427536FC10045CFD3 /* SMMidiSynth.h in Headers */ = {isa = PBXBuildFile; fileRef = D026D10227536FC10045CFD3 /* SMMidiSynth.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D026D16527536FC10045CFD3 /* SMMMapIn.h in Headers */ = {isa = PBXBuildFile; fileRef = D026D10327536FC10045CFD3 /* SMMMapIn.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D026D16627536FC10045CFD3 /* SMMidiSynth.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D026D10427536FC10045CFD3 /* SMMidiSynth.cpp */; };
+		D026D16727536FC10045CFD3 /* SMUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D026D10527536FC10045CFD3 /* SMUtils.cpp */; };
+		D026D16827536FC10045CFD3 /* SMSineDecoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D026D10627536FC10045CFD3 /* SMSineDecoder.cpp */; };
+		D026D16927536FC10045CFD3 /* SMGenericOut.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D026D10727536FC10045CFD3 /* SMGenericOut.cpp */; };
+		D026D16A27536FC10045CFD3 /* SMMorphOperatorModule.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D026D10827536FC10045CFD3 /* SMMorphOperatorModule.cpp */; };
+		D026D16B27536FC10045CFD3 /* SMGenericIn.h in Headers */ = {isa = PBXBuildFile; fileRef = D026D10927536FC10045CFD3 /* SMGenericIn.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D026D16C27536FC10045CFD3 /* SMStdioOut.h in Headers */ = {isa = PBXBuildFile; fileRef = D026D10A27536FC10045CFD3 /* SMStdioOut.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D026D16D27536FC10045CFD3 /* SMMorphGridModule.h in Headers */ = {isa = PBXBuildFile; fileRef = D026D10B27536FC10045CFD3 /* SMMorphGridModule.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D026D16E27536FC10045CFD3 /* SMMorphPlanVoice.h in Headers */ = {isa = PBXBuildFile; fileRef = D026D10C27536FC10045CFD3 /* SMMorphPlanVoice.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D026D16F27536FC10045CFD3 /* SMMath.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D026D10D27536FC10045CFD3 /* SMMath.cpp */; };
+		D026D17027536FC10045CFD3 /* SMPolyPhaseCoeffs.h in Headers */ = {isa = PBXBuildFile; fileRef = D026D10E27536FC10045CFD3 /* SMPolyPhaseCoeffs.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D026D17127536FC10045CFD3 /* SMGenericOut.h in Headers */ = {isa = PBXBuildFile; fileRef = D026D10F27536FC10045CFD3 /* SMGenericOut.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D026D17227536FC10045CFD3 /* SMMorphGridModule.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D026D11027536FC10045CFD3 /* SMMorphGridModule.cpp */; };
+		D026D17327536FC10045CFD3 /* SMMorphSourceModule.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D026D11127536FC10045CFD3 /* SMMorphSourceModule.cpp */; };
+		D026D17427536FC10045CFD3 /* SMIFftSynth.h in Headers */ = {isa = PBXBuildFile; fileRef = D026D11227536FC10045CFD3 /* SMIFftSynth.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D026D17527536FC10045CFD3 /* SMMorphSource.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D026D11327536FC10045CFD3 /* SMMorphSource.cpp */; };
+		D026D17627536FC10045CFD3 /* SMSignal.h in Headers */ = {isa = PBXBuildFile; fileRef = D026D11427536FC10045CFD3 /* SMSignal.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D026D17727536FC10045CFD3 /* SMMorphOutputModule.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D026D11527536FC10045CFD3 /* SMMorphOutputModule.cpp */; };
+		D026D17827536FC10045CFD3 /* SMMorphOutputModule.h in Headers */ = {isa = PBXBuildFile; fileRef = D026D11627536FC10045CFD3 /* SMMorphOutputModule.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D026D17927536FC10045CFD3 /* SMInFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D026D11727536FC10045CFD3 /* SMInFile.cpp */; };
+		D026D17A27536FC10045CFD3 /* SMWavSetRepo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D026D11827536FC10045CFD3 /* SMWavSetRepo.cpp */; };
+		D026D17B27536FC10045CFD3 /* SMProject.h in Headers */ = {isa = PBXBuildFile; fileRef = D026D11927536FC10045CFD3 /* SMProject.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D026D17C27536FC10045CFD3 /* SMIFftSynth.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D026D11A27536FC10045CFD3 /* SMIFftSynth.cpp */; };
+		D026D17D27536FC10045CFD3 /* SMStdioSubIn.h in Headers */ = {isa = PBXBuildFile; fileRef = D026D11B27536FC10045CFD3 /* SMStdioSubIn.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D026D17E27536FC10045CFD3 /* SMLeakDebugger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D026D11C27536FC10045CFD3 /* SMLeakDebugger.cpp */; };
+		D026D17F27536FC10045CFD3 /* SMPolyPhaseInter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D026D11D27536FC10045CFD3 /* SMPolyPhaseInter.cpp */; };
+		D026D18027536FC10045CFD3 /* SMNoiseBandPartition.h in Headers */ = {isa = PBXBuildFile; fileRef = D026D11E27536FC10045CFD3 /* SMNoiseBandPartition.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D026D18127536FC10045CFD3 /* SMUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = D026D11F27536FC10045CFD3 /* SMUtils.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D026D18227536FC10045CFD3 /* SMWavSet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D026D12027536FC10045CFD3 /* SMWavSet.cpp */; };
+		D026D18327536FC10045CFD3 /* SMMMapIn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D026D12127536FC10045CFD3 /* SMMMapIn.cpp */; };
+		D026D18427536FC10045CFD3 /* SMMorphGrid.h in Headers */ = {isa = PBXBuildFile; fileRef = D026D12227536FC10045CFD3 /* SMMorphGrid.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D026D18527536FC10045CFD3 /* SMEncoder.h in Headers */ = {isa = PBXBuildFile; fileRef = D026D12327536FC10045CFD3 /* SMEncoder.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D026D18627536FC10045CFD3 /* SMFft.h in Headers */ = {isa = PBXBuildFile; fileRef = D026D12427536FC10045CFD3 /* SMFft.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D026D18727536FC10045CFD3 /* SMOutFile.h in Headers */ = {isa = PBXBuildFile; fileRef = D026D12527536FC10045CFD3 /* SMOutFile.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D026D18827536FC10045CFD3 /* SMBlockUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = D026D12627536FC10045CFD3 /* SMBlockUtils.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D026D18927536FC10045CFD3 /* SMMorphUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = D026D12727536FC10045CFD3 /* SMMorphUtils.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D026D18A27536FC10045CFD3 /* SMMemOut.h in Headers */ = {isa = PBXBuildFile; fileRef = D026D12827536FC10045CFD3 /* SMMemOut.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D026D18B27536FC10045CFD3 /* SMMorphPlanVoice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D026D12927536FC10045CFD3 /* SMMorphPlanVoice.cpp */; };
+		D026D18C27536FC10045CFD3 /* SMMorphOperator.h in Headers */ = {isa = PBXBuildFile; fileRef = D026D12A27536FC10045CFD3 /* SMMorphOperator.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D026D18D27536FC10045CFD3 /* SMAudio.h in Headers */ = {isa = PBXBuildFile; fileRef = D026D12B27536FC10045CFD3 /* SMAudio.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D026D18F27536FC10045CFD3 /* SMEncoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D026D12D27536FC10045CFD3 /* SMEncoder.cpp */; };
+		D026D19027536FC10045CFD3 /* SMLiveDecoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D026D12E27536FC10045CFD3 /* SMLiveDecoder.cpp */; };
+		D026D19127536FC10045CFD3 /* SMMorphOutput.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D026D12F27536FC10045CFD3 /* SMMorphOutput.cpp */; };
+		D026D19227536FC10045CFD3 /* SMStdioIn.h in Headers */ = {isa = PBXBuildFile; fileRef = D026D13027536FC10045CFD3 /* SMStdioIn.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D026D19327536FC10045CFD3 /* SMMemOut.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D026D13127536FC10045CFD3 /* SMMemOut.cpp */; };
+		D026D19427536FC10045CFD3 /* SMMorphGrid.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D026D13227536FC10045CFD3 /* SMMorphGrid.cpp */; };
+		D026D19527536FC10045CFD3 /* SMMorphOperatorModule.h in Headers */ = {isa = PBXBuildFile; fileRef = D026D13327536FC10045CFD3 /* SMMorphOperatorModule.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D026D19627536FC10045CFD3 /* SMGenericIn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D026D13427536FC10045CFD3 /* SMGenericIn.cpp */; };
+		D026D19727536FC10045CFD3 /* SMLiveDecoderSource.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D026D13527536FC10045CFD3 /* SMLiveDecoderSource.cpp */; };
+		D026D19827536FC10045CFD3 /* SMFft.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D026D13627536FC10045CFD3 /* SMFft.cpp */; };
+		D026D19927536FC10045CFD3 /* SMMathArm.h in Headers */ = {isa = PBXBuildFile; fileRef = D026D13727536FC10045CFD3 /* SMMathArm.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D026D19A27536FC10045CFD3 /* SMBlockUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D026D13827536FC10045CFD3 /* SMBlockUtils.cpp */; };
+		D026D19B27536FC10045CFD3 /* SMOutFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D026D13927536FC10045CFD3 /* SMOutFile.cpp */; };
+		D026D19F2753702F0045CFD3 /* MorphKit.h in Headers */ = {isa = PBXBuildFile; fileRef = D026D19D2753702F0045CFD3 /* MorphKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		D020F2DC29F7A54B00D2CECB /* pffft.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = pffft.c; sourceTree = "<group>"; };
+		D020F2DD29F7A54B00D2CECB /* pffft.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pffft.h; sourceTree = "<group>"; };
+		D020F2E029F7A55200D2CECB /* fixed_capacity_vector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fixed_capacity_vector.h; sourceTree = "<group>"; };
+		D026D0CC27536F8C0045CFD3 /* MorphKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MorphKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		D026D0D827536FC10045CFD3 /* SMAudio.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SMAudio.cpp; sourceTree = "<group>"; };
+		D026D0D927536FC10045CFD3 /* SMMorphSourceModule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SMMorphSourceModule.h; sourceTree = "<group>"; };
+		D026D0DA27536FC10045CFD3 /* SMMorphPlanSynth.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SMMorphPlanSynth.h; sourceTree = "<group>"; };
+		D026D0DB27536FC10045CFD3 /* SMNoiseBandPartition.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SMNoiseBandPartition.cpp; sourceTree = "<group>"; };
+		D026D0DC27536FC10045CFD3 /* SMStdioSubIn.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SMStdioSubIn.cpp; sourceTree = "<group>"; };
+		D026D0DD27536FC10045CFD3 /* SMLiveDecoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SMLiveDecoder.h; sourceTree = "<group>"; };
+		D026D0DE27536FC10045CFD3 /* SMAudioTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SMAudioTool.h; sourceTree = "<group>"; };
+		D026D0DF27536FC10045CFD3 /* SMPcg32rng.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SMPcg32rng.h; sourceTree = "<group>"; };
+		D026D0E027536FC10045CFD3 /* SMLeakDebugger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SMLeakDebugger.h; sourceTree = "<group>"; };
+		D026D0E127536FC10045CFD3 /* SMSynthInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SMSynthInterface.h; sourceTree = "<group>"; };
+		D026D0E227536FC10045CFD3 /* SMWavData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SMWavData.h; sourceTree = "<group>"; };
+		D026D0E327536FC10045CFD3 /* SMMorphSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SMMorphSource.h; sourceTree = "<group>"; };
+		D026D0E427536FC10045CFD3 /* SMSineDecoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SMSineDecoder.h; sourceTree = "<group>"; };
+		D026D0E527536FC10045CFD3 /* SMLiveDecoderSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SMLiveDecoderSource.h; sourceTree = "<group>"; };
+		D026D0E627536FC10045CFD3 /* SMAlignedArray.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SMAlignedArray.cpp; sourceTree = "<group>"; };
+		D026D0E927536FC10045CFD3 /* glib.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = glib.h; sourceTree = "<group>"; };
+		D026D0EA27536FC10045CFD3 /* SMAudioTool.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SMAudioTool.cpp; sourceTree = "<group>"; };
+		D026D0EB27536FC10045CFD3 /* SMObject.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SMObject.cpp; sourceTree = "<group>"; };
+		D026D0EC27536FC10045CFD3 /* SMStdioOut.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SMStdioOut.cpp; sourceTree = "<group>"; };
+		D026D0ED27536FC10045CFD3 /* SMInFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SMInFile.h; sourceTree = "<group>"; };
+		D026D0EE27536FC10045CFD3 /* SMMorphOutput.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SMMorphOutput.h; sourceTree = "<group>"; };
+		D026D0EF27536FC10045CFD3 /* SMRandom.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SMRandom.cpp; sourceTree = "<group>"; };
+		D026D0F027536FC10045CFD3 /* SMRandom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SMRandom.h; sourceTree = "<group>"; };
+		D026D0F127536FC10045CFD3 /* SMAlignedArray.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SMAlignedArray.h; sourceTree = "<group>"; };
+		D026D0F227536FC10045CFD3 /* SMWavData.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SMWavData.cpp; sourceTree = "<group>"; };
+		D026D0F327536FC10045CFD3 /* SMWavSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SMWavSet.h; sourceTree = "<group>"; };
+		D026D0F427536FC10045CFD3 /* SMEffectDecoder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SMEffectDecoder.cpp; sourceTree = "<group>"; };
+		D026D0F527536FC10045CFD3 /* SMStdioIn.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SMStdioIn.cpp; sourceTree = "<group>"; };
+		D026D0F627536FC10045CFD3 /* SMMorphPlan.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SMMorphPlan.h; sourceTree = "<group>"; };
+		D026D0F727536FC10045CFD3 /* SMWavSetRepo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SMWavSetRepo.h; sourceTree = "<group>"; };
+		D026D0F827536FC10045CFD3 /* SMMorphPlanSynth.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SMMorphPlanSynth.cpp; sourceTree = "<group>"; };
+		D026D0F927536FC10045CFD3 /* SMEffectDecoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SMEffectDecoder.h; sourceTree = "<group>"; };
+		D026D0FA27536FC10045CFD3 /* SMMorphOperator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SMMorphOperator.cpp; sourceTree = "<group>"; };
+		D026D0FB27536FC10045CFD3 /* SMProject.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SMProject.cpp; sourceTree = "<group>"; };
+		D026D0FC27536FC10045CFD3 /* SMMath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SMMath.h; sourceTree = "<group>"; };
+		D026D0FE27536FC10045CFD3 /* SMMorphUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SMMorphUtils.cpp; sourceTree = "<group>"; };
+		D026D0FF27536FC10045CFD3 /* SMPolyPhaseInter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SMPolyPhaseInter.h; sourceTree = "<group>"; };
+		D026D10027536FC10045CFD3 /* SMMorphPlan.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SMMorphPlan.cpp; sourceTree = "<group>"; };
+		D026D10127536FC10045CFD3 /* SMObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SMObject.h; sourceTree = "<group>"; };
+		D026D10227536FC10045CFD3 /* SMMidiSynth.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SMMidiSynth.h; sourceTree = "<group>"; };
+		D026D10327536FC10045CFD3 /* SMMMapIn.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SMMMapIn.h; sourceTree = "<group>"; };
+		D026D10427536FC10045CFD3 /* SMMidiSynth.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SMMidiSynth.cpp; sourceTree = "<group>"; };
+		D026D10527536FC10045CFD3 /* SMUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SMUtils.cpp; sourceTree = "<group>"; };
+		D026D10627536FC10045CFD3 /* SMSineDecoder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SMSineDecoder.cpp; sourceTree = "<group>"; };
+		D026D10727536FC10045CFD3 /* SMGenericOut.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SMGenericOut.cpp; sourceTree = "<group>"; };
+		D026D10827536FC10045CFD3 /* SMMorphOperatorModule.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SMMorphOperatorModule.cpp; sourceTree = "<group>"; };
+		D026D10927536FC10045CFD3 /* SMGenericIn.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SMGenericIn.h; sourceTree = "<group>"; };
+		D026D10A27536FC10045CFD3 /* SMStdioOut.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SMStdioOut.h; sourceTree = "<group>"; };
+		D026D10B27536FC10045CFD3 /* SMMorphGridModule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SMMorphGridModule.h; sourceTree = "<group>"; };
+		D026D10C27536FC10045CFD3 /* SMMorphPlanVoice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SMMorphPlanVoice.h; sourceTree = "<group>"; };
+		D026D10D27536FC10045CFD3 /* SMMath.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SMMath.cpp; sourceTree = "<group>"; };
+		D026D10E27536FC10045CFD3 /* SMPolyPhaseCoeffs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SMPolyPhaseCoeffs.h; sourceTree = "<group>"; };
+		D026D10F27536FC10045CFD3 /* SMGenericOut.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SMGenericOut.h; sourceTree = "<group>"; };
+		D026D11027536FC10045CFD3 /* SMMorphGridModule.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SMMorphGridModule.cpp; sourceTree = "<group>"; };
+		D026D11127536FC10045CFD3 /* SMMorphSourceModule.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SMMorphSourceModule.cpp; sourceTree = "<group>"; };
+		D026D11227536FC10045CFD3 /* SMIFftSynth.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SMIFftSynth.h; sourceTree = "<group>"; };
+		D026D11327536FC10045CFD3 /* SMMorphSource.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SMMorphSource.cpp; sourceTree = "<group>"; };
+		D026D11427536FC10045CFD3 /* SMSignal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SMSignal.h; sourceTree = "<group>"; };
+		D026D11527536FC10045CFD3 /* SMMorphOutputModule.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SMMorphOutputModule.cpp; sourceTree = "<group>"; };
+		D026D11627536FC10045CFD3 /* SMMorphOutputModule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SMMorphOutputModule.h; sourceTree = "<group>"; };
+		D026D11727536FC10045CFD3 /* SMInFile.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SMInFile.cpp; sourceTree = "<group>"; };
+		D026D11827536FC10045CFD3 /* SMWavSetRepo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SMWavSetRepo.cpp; sourceTree = "<group>"; };
+		D026D11927536FC10045CFD3 /* SMProject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SMProject.h; sourceTree = "<group>"; };
+		D026D11A27536FC10045CFD3 /* SMIFftSynth.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SMIFftSynth.cpp; sourceTree = "<group>"; };
+		D026D11B27536FC10045CFD3 /* SMStdioSubIn.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SMStdioSubIn.h; sourceTree = "<group>"; };
+		D026D11C27536FC10045CFD3 /* SMLeakDebugger.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SMLeakDebugger.cpp; sourceTree = "<group>"; };
+		D026D11D27536FC10045CFD3 /* SMPolyPhaseInter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SMPolyPhaseInter.cpp; sourceTree = "<group>"; };
+		D026D11E27536FC10045CFD3 /* SMNoiseBandPartition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SMNoiseBandPartition.h; sourceTree = "<group>"; };
+		D026D11F27536FC10045CFD3 /* SMUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SMUtils.h; sourceTree = "<group>"; };
+		D026D12027536FC10045CFD3 /* SMWavSet.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SMWavSet.cpp; sourceTree = "<group>"; };
+		D026D12127536FC10045CFD3 /* SMMMapIn.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SMMMapIn.cpp; sourceTree = "<group>"; };
+		D026D12227536FC10045CFD3 /* SMMorphGrid.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SMMorphGrid.h; sourceTree = "<group>"; };
+		D026D12327536FC10045CFD3 /* SMEncoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SMEncoder.h; sourceTree = "<group>"; };
+		D026D12427536FC10045CFD3 /* SMFft.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SMFft.h; sourceTree = "<group>"; };
+		D026D12527536FC10045CFD3 /* SMOutFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SMOutFile.h; sourceTree = "<group>"; };
+		D026D12627536FC10045CFD3 /* SMBlockUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SMBlockUtils.h; sourceTree = "<group>"; };
+		D026D12727536FC10045CFD3 /* SMMorphUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SMMorphUtils.h; sourceTree = "<group>"; };
+		D026D12827536FC10045CFD3 /* SMMemOut.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SMMemOut.h; sourceTree = "<group>"; };
+		D026D12927536FC10045CFD3 /* SMMorphPlanVoice.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SMMorphPlanVoice.cpp; sourceTree = "<group>"; };
+		D026D12A27536FC10045CFD3 /* SMMorphOperator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SMMorphOperator.h; sourceTree = "<group>"; };
+		D026D12B27536FC10045CFD3 /* SMAudio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SMAudio.h; sourceTree = "<group>"; };
+		D026D12D27536FC10045CFD3 /* SMEncoder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SMEncoder.cpp; sourceTree = "<group>"; };
+		D026D12E27536FC10045CFD3 /* SMLiveDecoder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SMLiveDecoder.cpp; sourceTree = "<group>"; };
+		D026D12F27536FC10045CFD3 /* SMMorphOutput.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SMMorphOutput.cpp; sourceTree = "<group>"; };
+		D026D13027536FC10045CFD3 /* SMStdioIn.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SMStdioIn.h; sourceTree = "<group>"; };
+		D026D13127536FC10045CFD3 /* SMMemOut.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SMMemOut.cpp; sourceTree = "<group>"; };
+		D026D13227536FC10045CFD3 /* SMMorphGrid.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SMMorphGrid.cpp; sourceTree = "<group>"; };
+		D026D13327536FC10045CFD3 /* SMMorphOperatorModule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SMMorphOperatorModule.h; sourceTree = "<group>"; };
+		D026D13427536FC10045CFD3 /* SMGenericIn.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SMGenericIn.cpp; sourceTree = "<group>"; };
+		D026D13527536FC10045CFD3 /* SMLiveDecoderSource.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SMLiveDecoderSource.cpp; sourceTree = "<group>"; };
+		D026D13627536FC10045CFD3 /* SMFft.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SMFft.cpp; sourceTree = "<group>"; };
+		D026D13727536FC10045CFD3 /* SMMathArm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SMMathArm.h; sourceTree = "<group>"; };
+		D026D13827536FC10045CFD3 /* SMBlockUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SMBlockUtils.cpp; sourceTree = "<group>"; };
+		D026D13927536FC10045CFD3 /* SMOutFile.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SMOutFile.cpp; sourceTree = "<group>"; };
+		D026D19C2753702F0045CFD3 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D026D19D2753702F0045CFD3 /* MorphKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MorphKit.h; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		D026D0C927536F8C0045CFD3 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		D026D0C227536F8C0045CFD3 = {
+			isa = PBXGroup;
+			children = (
+				D026D0D727536FC10045CFD3 /* Source */,
+				D026D19C2753702F0045CFD3 /* Info.plist */,
+				D026D19D2753702F0045CFD3 /* MorphKit.h */,
+				D026D0CD27536F8C0045CFD3 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		D026D0CD27536F8C0045CFD3 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				D026D0CC27536F8C0045CFD3 /* MorphKit.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		D026D0D727536FC10045CFD3 /* Source */ = {
+			isa = PBXGroup;
+			children = (
+				D020F2E029F7A55200D2CECB /* fixed_capacity_vector.h */,
+				D026D0E927536FC10045CFD3 /* glib.h */,
+				D020F2DC29F7A54B00D2CECB /* pffft.c */,
+				D020F2DD29F7A54B00D2CECB /* pffft.h */,
+				D026D0E627536FC10045CFD3 /* SMAlignedArray.cpp */,
+				D026D0F127536FC10045CFD3 /* SMAlignedArray.h */,
+				D026D0D827536FC10045CFD3 /* SMAudio.cpp */,
+				D026D12B27536FC10045CFD3 /* SMAudio.h */,
+				D026D0EA27536FC10045CFD3 /* SMAudioTool.cpp */,
+				D026D0DE27536FC10045CFD3 /* SMAudioTool.h */,
+				D026D13827536FC10045CFD3 /* SMBlockUtils.cpp */,
+				D026D12627536FC10045CFD3 /* SMBlockUtils.h */,
+				D026D0F427536FC10045CFD3 /* SMEffectDecoder.cpp */,
+				D026D0F927536FC10045CFD3 /* SMEffectDecoder.h */,
+				D026D12D27536FC10045CFD3 /* SMEncoder.cpp */,
+				D026D12327536FC10045CFD3 /* SMEncoder.h */,
+				D026D13627536FC10045CFD3 /* SMFft.cpp */,
+				D026D12427536FC10045CFD3 /* SMFft.h */,
+				D026D13427536FC10045CFD3 /* SMGenericIn.cpp */,
+				D026D10927536FC10045CFD3 /* SMGenericIn.h */,
+				D026D10727536FC10045CFD3 /* SMGenericOut.cpp */,
+				D026D10F27536FC10045CFD3 /* SMGenericOut.h */,
+				D026D11A27536FC10045CFD3 /* SMIFftSynth.cpp */,
+				D026D11227536FC10045CFD3 /* SMIFftSynth.h */,
+				D026D11727536FC10045CFD3 /* SMInFile.cpp */,
+				D026D0ED27536FC10045CFD3 /* SMInFile.h */,
+				D026D11C27536FC10045CFD3 /* SMLeakDebugger.cpp */,
+				D026D0E027536FC10045CFD3 /* SMLeakDebugger.h */,
+				D026D12E27536FC10045CFD3 /* SMLiveDecoder.cpp */,
+				D026D0DD27536FC10045CFD3 /* SMLiveDecoder.h */,
+				D026D13527536FC10045CFD3 /* SMLiveDecoderSource.cpp */,
+				D026D0E527536FC10045CFD3 /* SMLiveDecoderSource.h */,
+				D026D10D27536FC10045CFD3 /* SMMath.cpp */,
+				D026D0FC27536FC10045CFD3 /* SMMath.h */,
+				D026D13727536FC10045CFD3 /* SMMathArm.h */,
+				D026D13127536FC10045CFD3 /* SMMemOut.cpp */,
+				D026D12827536FC10045CFD3 /* SMMemOut.h */,
+				D026D10427536FC10045CFD3 /* SMMidiSynth.cpp */,
+				D026D10227536FC10045CFD3 /* SMMidiSynth.h */,
+				D026D12127536FC10045CFD3 /* SMMMapIn.cpp */,
+				D026D10327536FC10045CFD3 /* SMMMapIn.h */,
+				D026D13227536FC10045CFD3 /* SMMorphGrid.cpp */,
+				D026D12227536FC10045CFD3 /* SMMorphGrid.h */,
+				D026D11027536FC10045CFD3 /* SMMorphGridModule.cpp */,
+				D026D10B27536FC10045CFD3 /* SMMorphGridModule.h */,
+				D026D0FA27536FC10045CFD3 /* SMMorphOperator.cpp */,
+				D026D12A27536FC10045CFD3 /* SMMorphOperator.h */,
+				D026D10827536FC10045CFD3 /* SMMorphOperatorModule.cpp */,
+				D026D13327536FC10045CFD3 /* SMMorphOperatorModule.h */,
+				D026D12F27536FC10045CFD3 /* SMMorphOutput.cpp */,
+				D026D0EE27536FC10045CFD3 /* SMMorphOutput.h */,
+				D026D11527536FC10045CFD3 /* SMMorphOutputModule.cpp */,
+				D026D11627536FC10045CFD3 /* SMMorphOutputModule.h */,
+				D026D10027536FC10045CFD3 /* SMMorphPlan.cpp */,
+				D026D0F627536FC10045CFD3 /* SMMorphPlan.h */,
+				D026D0F827536FC10045CFD3 /* SMMorphPlanSynth.cpp */,
+				D026D0DA27536FC10045CFD3 /* SMMorphPlanSynth.h */,
+				D026D12927536FC10045CFD3 /* SMMorphPlanVoice.cpp */,
+				D026D10C27536FC10045CFD3 /* SMMorphPlanVoice.h */,
+				D026D11327536FC10045CFD3 /* SMMorphSource.cpp */,
+				D026D0E327536FC10045CFD3 /* SMMorphSource.h */,
+				D026D11127536FC10045CFD3 /* SMMorphSourceModule.cpp */,
+				D026D0D927536FC10045CFD3 /* SMMorphSourceModule.h */,
+				D026D0FE27536FC10045CFD3 /* SMMorphUtils.cpp */,
+				D026D12727536FC10045CFD3 /* SMMorphUtils.h */,
+				D026D0DB27536FC10045CFD3 /* SMNoiseBandPartition.cpp */,
+				D026D11E27536FC10045CFD3 /* SMNoiseBandPartition.h */,
+				D026D0EB27536FC10045CFD3 /* SMObject.cpp */,
+				D026D10127536FC10045CFD3 /* SMObject.h */,
+				D026D13927536FC10045CFD3 /* SMOutFile.cpp */,
+				D026D12527536FC10045CFD3 /* SMOutFile.h */,
+				D026D0DF27536FC10045CFD3 /* SMPcg32rng.h */,
+				D026D10E27536FC10045CFD3 /* SMPolyPhaseCoeffs.h */,
+				D026D11D27536FC10045CFD3 /* SMPolyPhaseInter.cpp */,
+				D026D0FF27536FC10045CFD3 /* SMPolyPhaseInter.h */,
+				D026D0FB27536FC10045CFD3 /* SMProject.cpp */,
+				D026D11927536FC10045CFD3 /* SMProject.h */,
+				D026D0EF27536FC10045CFD3 /* SMRandom.cpp */,
+				D026D0F027536FC10045CFD3 /* SMRandom.h */,
+				D026D11427536FC10045CFD3 /* SMSignal.h */,
+				D026D10627536FC10045CFD3 /* SMSineDecoder.cpp */,
+				D026D0E427536FC10045CFD3 /* SMSineDecoder.h */,
+				D026D0F527536FC10045CFD3 /* SMStdioIn.cpp */,
+				D026D13027536FC10045CFD3 /* SMStdioIn.h */,
+				D026D0EC27536FC10045CFD3 /* SMStdioOut.cpp */,
+				D026D10A27536FC10045CFD3 /* SMStdioOut.h */,
+				D026D0DC27536FC10045CFD3 /* SMStdioSubIn.cpp */,
+				D026D11B27536FC10045CFD3 /* SMStdioSubIn.h */,
+				D026D0E127536FC10045CFD3 /* SMSynthInterface.h */,
+				D026D10527536FC10045CFD3 /* SMUtils.cpp */,
+				D026D11F27536FC10045CFD3 /* SMUtils.h */,
+				D026D0F227536FC10045CFD3 /* SMWavData.cpp */,
+				D026D0E227536FC10045CFD3 /* SMWavData.h */,
+				D026D12027536FC10045CFD3 /* SMWavSet.cpp */,
+				D026D0F327536FC10045CFD3 /* SMWavSet.h */,
+				D026D11827536FC10045CFD3 /* SMWavSetRepo.cpp */,
+				D026D0F727536FC10045CFD3 /* SMWavSetRepo.h */,
+			);
+			name = Source;
+			path = ../../Source;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		D026D0C727536F8C0045CFD3 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D026D18627536FC10045CFD3 /* SMFft.h in Headers */,
+				D026D18127536FC10045CFD3 /* SMUtils.h in Headers */,
+				D026D15E27536FC10045CFD3 /* SMMath.h in Headers */,
+				D026D14B27536FC10045CFD3 /* glib.h in Headers */,
+				D026D18D27536FC10045CFD3 /* SMAudio.h in Headers */,
+				D026D16427536FC10045CFD3 /* SMMidiSynth.h in Headers */,
+				D026D15227536FC10045CFD3 /* SMRandom.h in Headers */,
+				D026D13C27536FC10045CFD3 /* SMMorphPlanSynth.h in Headers */,
+				D026D19227536FC10045CFD3 /* SMStdioIn.h in Headers */,
+				D026D18927536FC10045CFD3 /* SMMorphUtils.h in Headers */,
+				D026D15827536FC10045CFD3 /* SMMorphPlan.h in Headers */,
+				D026D18C27536FC10045CFD3 /* SMMorphOperator.h in Headers */,
+				D026D18827536FC10045CFD3 /* SMBlockUtils.h in Headers */,
+				D020F2E129F7A55200D2CECB /* fixed_capacity_vector.h in Headers */,
+				D026D13B27536FC10045CFD3 /* SMMorphSourceModule.h in Headers */,
+				D026D17127536FC10045CFD3 /* SMGenericOut.h in Headers */,
+				D026D16C27536FC10045CFD3 /* SMStdioOut.h in Headers */,
+				D026D14027536FC10045CFD3 /* SMAudioTool.h in Headers */,
+				D026D14627536FC10045CFD3 /* SMSineDecoder.h in Headers */,
+				D026D18427536FC10045CFD3 /* SMMorphGrid.h in Headers */,
+				D026D17B27536FC10045CFD3 /* SMProject.h in Headers */,
+				D026D16E27536FC10045CFD3 /* SMMorphPlanVoice.h in Headers */,
+				D026D18A27536FC10045CFD3 /* SMMemOut.h in Headers */,
+				D026D18727536FC10045CFD3 /* SMOutFile.h in Headers */,
+				D026D14527536FC10045CFD3 /* SMMorphSource.h in Headers */,
+				D026D17427536FC10045CFD3 /* SMIFftSynth.h in Headers */,
+				D026D14F27536FC10045CFD3 /* SMInFile.h in Headers */,
+				D026D19F2753702F0045CFD3 /* MorphKit.h in Headers */,
+				D026D14727536FC10045CFD3 /* SMLiveDecoderSource.h in Headers */,
+				D026D14227536FC10045CFD3 /* SMLeakDebugger.h in Headers */,
+				D026D15027536FC10045CFD3 /* SMMorphOutput.h in Headers */,
+				D026D15527536FC10045CFD3 /* SMWavSet.h in Headers */,
+				D020F2DF29F7A54B00D2CECB /* pffft.h in Headers */,
+				D026D14427536FC10045CFD3 /* SMWavData.h in Headers */,
+				D026D19527536FC10045CFD3 /* SMMorphOperatorModule.h in Headers */,
+				D026D18027536FC10045CFD3 /* SMNoiseBandPartition.h in Headers */,
+				D026D17627536FC10045CFD3 /* SMSignal.h in Headers */,
+				D026D17027536FC10045CFD3 /* SMPolyPhaseCoeffs.h in Headers */,
+				D026D19927536FC10045CFD3 /* SMMathArm.h in Headers */,
+				D026D16D27536FC10045CFD3 /* SMMorphGridModule.h in Headers */,
+				D026D18527536FC10045CFD3 /* SMEncoder.h in Headers */,
+				D026D14127536FC10045CFD3 /* SMPcg32rng.h in Headers */,
+				D026D15927536FC10045CFD3 /* SMWavSetRepo.h in Headers */,
+				D026D15327536FC10045CFD3 /* SMAlignedArray.h in Headers */,
+				D026D13F27536FC10045CFD3 /* SMLiveDecoder.h in Headers */,
+				D026D16527536FC10045CFD3 /* SMMMapIn.h in Headers */,
+				D026D16B27536FC10045CFD3 /* SMGenericIn.h in Headers */,
+				D026D15B27536FC10045CFD3 /* SMEffectDecoder.h in Headers */,
+				D026D17827536FC10045CFD3 /* SMMorphOutputModule.h in Headers */,
+				D026D16327536FC10045CFD3 /* SMObject.h in Headers */,
+				D026D14327536FC10045CFD3 /* SMSynthInterface.h in Headers */,
+				D026D17D27536FC10045CFD3 /* SMStdioSubIn.h in Headers */,
+				D026D16127536FC10045CFD3 /* SMPolyPhaseInter.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		D026D0CB27536F8C0045CFD3 /* MorphKit */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D026D0D427536F8C0045CFD3 /* Build configuration list for PBXNativeTarget "MorphKit" */;
+			buildPhases = (
+				D026D0C727536F8C0045CFD3 /* Headers */,
+				D026D0C827536F8C0045CFD3 /* Sources */,
+				D026D0C927536F8C0045CFD3 /* Frameworks */,
+				D026D0CA27536F8C0045CFD3 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = MorphKit;
+			productName = MorphKit;
+			productReference = D026D0CC27536F8C0045CFD3 /* MorphKit.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		D026D0C327536F8C0045CFD3 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 1130;
+				ORGANIZATIONNAME = OneRedDog;
+				TargetAttributes = {
+					D026D0CB27536F8C0045CFD3 = {
+						CreatedOnToolsVersion = 11.3.1;
+					};
+				};
+			};
+			buildConfigurationList = D026D0C627536F8C0045CFD3 /* Build configuration list for PBXProject "MorphKit" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = D026D0C227536F8C0045CFD3;
+			productRefGroup = D026D0CD27536F8C0045CFD3 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				D026D0CB27536F8C0045CFD3 /* MorphKit */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		D026D0CA27536F8C0045CFD3 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		D026D0C827536F8C0045CFD3 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D026D17927536FC10045CFD3 /* SMInFile.cpp in Sources */,
+				D026D15A27536FC10045CFD3 /* SMMorphPlanSynth.cpp in Sources */,
+				D026D19827536FC10045CFD3 /* SMFft.cpp in Sources */,
+				D026D16827536FC10045CFD3 /* SMSineDecoder.cpp in Sources */,
+				D026D15127536FC10045CFD3 /* SMRandom.cpp in Sources */,
+				D026D19627536FC10045CFD3 /* SMGenericIn.cpp in Sources */,
+				D026D19727536FC10045CFD3 /* SMLiveDecoderSource.cpp in Sources */,
+				D026D16627536FC10045CFD3 /* SMMidiSynth.cpp in Sources */,
+				D026D17E27536FC10045CFD3 /* SMLeakDebugger.cpp in Sources */,
+				D026D16027536FC10045CFD3 /* SMMorphUtils.cpp in Sources */,
+				D026D18227536FC10045CFD3 /* SMWavSet.cpp in Sources */,
+				D026D15727536FC10045CFD3 /* SMStdioIn.cpp in Sources */,
+				D026D17F27536FC10045CFD3 /* SMPolyPhaseInter.cpp in Sources */,
+				D026D13D27536FC10045CFD3 /* SMNoiseBandPartition.cpp in Sources */,
+				D026D19327536FC10045CFD3 /* SMMemOut.cpp in Sources */,
+				D020F2DE29F7A54B00D2CECB /* pffft.c in Sources */,
+				D026D16927536FC10045CFD3 /* SMGenericOut.cpp in Sources */,
+				D026D15D27536FC10045CFD3 /* SMProject.cpp in Sources */,
+				D026D13E27536FC10045CFD3 /* SMStdioSubIn.cpp in Sources */,
+				D026D18B27536FC10045CFD3 /* SMMorphPlanVoice.cpp in Sources */,
+				D026D14D27536FC10045CFD3 /* SMObject.cpp in Sources */,
+				D026D17527536FC10045CFD3 /* SMMorphSource.cpp in Sources */,
+				D026D16F27536FC10045CFD3 /* SMMath.cpp in Sources */,
+				D026D19B27536FC10045CFD3 /* SMOutFile.cpp in Sources */,
+				D026D14827536FC10045CFD3 /* SMAlignedArray.cpp in Sources */,
+				D026D17A27536FC10045CFD3 /* SMWavSetRepo.cpp in Sources */,
+				D026D13A27536FC10045CFD3 /* SMAudio.cpp in Sources */,
+				D026D19A27536FC10045CFD3 /* SMBlockUtils.cpp in Sources */,
+				D026D16727536FC10045CFD3 /* SMUtils.cpp in Sources */,
+				D026D15427536FC10045CFD3 /* SMWavData.cpp in Sources */,
+				D026D16A27536FC10045CFD3 /* SMMorphOperatorModule.cpp in Sources */,
+				D026D17327536FC10045CFD3 /* SMMorphSourceModule.cpp in Sources */,
+				D026D19127536FC10045CFD3 /* SMMorphOutput.cpp in Sources */,
+				D026D14E27536FC10045CFD3 /* SMStdioOut.cpp in Sources */,
+				D026D17227536FC10045CFD3 /* SMMorphGridModule.cpp in Sources */,
+				D026D18F27536FC10045CFD3 /* SMEncoder.cpp in Sources */,
+				D026D19027536FC10045CFD3 /* SMLiveDecoder.cpp in Sources */,
+				D026D14C27536FC10045CFD3 /* SMAudioTool.cpp in Sources */,
+				D026D19427536FC10045CFD3 /* SMMorphGrid.cpp in Sources */,
+				D026D18327536FC10045CFD3 /* SMMMapIn.cpp in Sources */,
+				D026D16227536FC10045CFD3 /* SMMorphPlan.cpp in Sources */,
+				D026D17727536FC10045CFD3 /* SMMorphOutputModule.cpp in Sources */,
+				D026D17C27536FC10045CFD3 /* SMIFftSynth.cpp in Sources */,
+				D026D15627536FC10045CFD3 /* SMEffectDecoder.cpp in Sources */,
+				D026D15C27536FC10045CFD3 /* SMMorphOperator.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		D026D0D227536F8C0045CFD3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = "compiler-default";
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		D026D0D327536F8C0045CFD3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = "compiler-default";
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = macosx;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		D026D0D527536F8C0045CFD3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CONFIGURATION_BUILD_DIR = "$(PROJECT_DIR)/build/$(CONFIGURATION)";
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = "$(SRCROOT)/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = au.com.onereddog.MorphKit;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		D026D0D627536F8C0045CFD3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CONFIGURATION_BUILD_DIR = "$(PROJECT_DIR)/build/$(CONFIGURATION)";
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = "$(SRCROOT)/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = au.com.onereddog.MorphKit;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		D026D0C627536F8C0045CFD3 /* Build configuration list for PBXProject "MorphKit" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D026D0D227536F8C0045CFD3 /* Debug */,
+				D026D0D327536F8C0045CFD3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D026D0D427536F8C0045CFD3 /* Build configuration list for PBXNativeTarget "MorphKit" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D026D0D527536F8C0045CFD3 /* Debug */,
+				D026D0D627536F8C0045CFD3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = D026D0C327536F8C0045CFD3 /* Project object */;
+}
