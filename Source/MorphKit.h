@@ -1,7 +1,6 @@
 #ifndef SPECTMORPH_MORPHKIT_HH
 #define SPECTMORPH_MORPHKIT_HH
 
-#include "SMMidiSynth.h"
 #include "SMMorphGrid.h"
 #include "SMMorphOutput.h"
 #include "SMMorphOutputModule.h"

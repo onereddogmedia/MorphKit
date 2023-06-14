@@ -27,7 +27,7 @@ class Pcg32Rng {
         6364136223846793005ULL; // from C. E. Hayness, see TAOCP by D. E. Knuth, 3.3.4, table 1, line 26.
     static inline constexpr uint32_t ror32(const uint32_t bits, const uint32_t offset) {
         // bitwise rotate-right pattern recognized by gcc & clang iff 32==sizeof (bits)
-        return (bits >> offset) | (bits << (32 - offset));
+        return (bits >> offset) | (bits << ((32 - offset) & 31));
     }
     static inline constexpr uint32_t pcg_xsh_rr(const uint64_t input) {
         // Section 6.3.1. 32-bit Output, 64-bit State: PCG-XSH-RR

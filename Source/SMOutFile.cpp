@@ -105,7 +105,7 @@ void OutFile::write_float_block(const string& s, const vector<float>& fb) {
     write_raw_string(s);
     write_raw_int((int)fb.size());
 
-    file->write(&fb[0], fb.size() * 4);
+    file->write(fb.data(), fb.size() * 4);
 }
 
 void OutFile::write_uint16_block(const string& s, const AudioBlock::Block& ib) {
@@ -114,7 +114,7 @@ void OutFile::write_uint16_block(const string& s, const AudioBlock::Block& ib) {
     write_raw_string(s);
     write_raw_int((int)ib.size());
 
-    file->write(&ib[0], ib.size() * 2);
+    file->write(ib.data(), ib.size() * 2);
 }
 
 void OutFile::write_blob(const string& s, const void* data, size_t size) {

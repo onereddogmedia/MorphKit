@@ -105,6 +105,7 @@
 		D026D19A27536FC10045CFD3 /* SMBlockUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D026D13827536FC10045CFD3 /* SMBlockUtils.cpp */; };
 		D026D19B27536FC10045CFD3 /* SMOutFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D026D13927536FC10045CFD3 /* SMOutFile.cpp */; };
 		D026D19F2753702F0045CFD3 /* MorphKit.h in Headers */ = {isa = PBXBuildFile; fileRef = D026D19D2753702F0045CFD3 /* MorphKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D02BB8B32A397D05006B5EC8 /* MorphKit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D02BB8B22A397D05006B5EC8 /* MorphKit.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -208,6 +209,7 @@
 		D026D13927536FC10045CFD3 /* SMOutFile.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SMOutFile.cpp; sourceTree = "<group>"; };
 		D026D19C2753702F0045CFD3 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D026D19D2753702F0045CFD3 /* MorphKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MorphKit.h; sourceTree = "<group>"; };
+		D02BB8B22A397D05006B5EC8 /* MorphKit.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MorphKit.cpp; path = ../../Source/MorphKit.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -226,6 +228,7 @@
 			children = (
 				D026D0D727536FC10045CFD3 /* Source */,
 				D026D19C2753702F0045CFD3 /* Info.plist */,
+				D02BB8B22A397D05006B5EC8 /* MorphKit.cpp */,
 				D026D19D2753702F0045CFD3 /* MorphKit.h */,
 				D026D0CD27536F8C0045CFD3 /* Products */,
 			);
@@ -482,6 +485,7 @@
 				D026D15127536FC10045CFD3 /* SMRandom.cpp in Sources */,
 				D026D19627536FC10045CFD3 /* SMGenericIn.cpp in Sources */,
 				D026D19727536FC10045CFD3 /* SMLiveDecoderSource.cpp in Sources */,
+				D02BB8B32A397D05006B5EC8 /* MorphKit.cpp in Sources */,
 				D026D16627536FC10045CFD3 /* SMMidiSynth.cpp in Sources */,
 				D026D17E27536FC10045CFD3 /* SMLeakDebugger.cpp in Sources */,
 				D026D16027536FC10045CFD3 /* SMMorphUtils.cpp in Sources */,

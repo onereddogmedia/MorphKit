@@ -41,7 +41,9 @@ SineDecoder::~SineDecoder() {
  *
  * This needs two adjecant frames as arguments.
  *
- * @param window       the reconstruction window used for MODE_PHASE_SYNC_OVERLAP
+ * @param block              the current frame (the frame to be decoded)
+ * @param next_block   the frame after the current frame
+ * @param window            the reconstruction window used for MODE_PHASE_SYNC_OVERLAP
  */
 void SineDecoder::process(const AudioBlock& block, const AudioBlock& next_block, const vector<double>& window,
                           vector<float>& decoded_sines) {

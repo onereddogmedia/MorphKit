@@ -156,9 +156,12 @@ static bool morph(AudioBlock& out_block, bool have_left, const AudioBlock& left_
     out_block.mags.clear();
 
     // FIXME: lpc stuff
+    size_t left_freqs_size = left_block.freqs.size();
+    size_t right_freqs_size = right_block.freqs.size();
+
     MagData mds[AudioBlock::block_size * 2];
     size_t mds_size = 0;
-    for (size_t i = 0; i < left_block.freqs.size(); i++) {
+    for (size_t i = 0; i < left_freqs_size && i < AudioBlock::block_size; i++) {
         MagData& md = mds[mds_size];
 
         md.block = MagData::BLOCK_LEFT;
@@ -166,7 +169,7 @@ static bool morph(AudioBlock& out_block, bool have_left, const AudioBlock& left_
         md.mag = left_block.mags[i];
         mds_size++;
     }
-    for (size_t i = 0; i < right_block.freqs.size(); i++) {
+    for (size_t i = 0; i < right_freqs_size && i < AudioBlock::block_size; i++) {
         MagData& md = mds[mds_size];
 
         md.block = MagData::BLOCK_RIGHT;
@@ -175,9 +178,6 @@ static bool morph(AudioBlock& out_block, bool have_left, const AudioBlock& left_
         mds_size++;
     }
     sort(mds, mds + mds_size, md_cmp);
-
-    size_t left_freqs_size = left_block.freqs.size();
-    size_t right_freqs_size = right_block.freqs.size();
 
     MorphUtils::FreqState left_freqs[AudioBlock::block_size];
     MorphUtils::FreqState right_freqs[AudioBlock::block_size];

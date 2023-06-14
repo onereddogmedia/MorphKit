@@ -197,9 +197,7 @@ inline void internal_fast_vector_sincosf(const VectorSinParams& params, float* s
     table_params.phase = 0;
     table_params.mag = 1;
     table_params.mode = VectorSinParams::REPLACE;
-    float* pim = &incf_im[0].f[0];
-    float* pre = &incf_re[0].f[0];
-    fast_vector_sincos(table_params, pim, pim + (TABLE_SIZE * 4), pre);
+    fast_vector_sincos(table_params, incf_im[0].f, (float*)&incf_im[TABLE_SIZE], incf_re[0].f);
 
     // inner loop using SSE instructions
     long todo = sin_end - sin_begin;

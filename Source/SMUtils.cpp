@@ -153,6 +153,11 @@ double get_time() {
     return double(tv.tv_sec) + double(tv.tv_usec) / 1000000.0;
 }
 
+#ifdef __clang__
+#    pragma clang diagnostic push
+#    pragma clang diagnostic ignored "-Wdeprecated-declarations"
+#endif
+
 string to_utf8(const u32string& str) {
     std::wstring_convert<std::codecvt_utf8<char32_t>, char32_t> conv;
     return conv.to_bytes(str);
@@ -162,6 +167,10 @@ u32string to_utf32(const string& utf8) {
     std::wstring_convert<std::codecvt_utf8<char32_t>, char32_t> conv;
     return conv.from_bytes(utf8);
 }
+
+#ifdef __clang__
+#    pragma clang diagnostic pop
+#endif
 
 double sm_atof(const char* str) // always use . as decimal seperator
 {

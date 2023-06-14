@@ -34,5 +34,7 @@ int StdioOut::put_byte(int c) {
 }
 
 size_t StdioOut::write(const void* ptr, size_t size) {
+    if (size == 0)
+        return 0;
     return fwrite(ptr, 1, size, file);
 }
