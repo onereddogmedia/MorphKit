@@ -18,7 +18,7 @@ class EffectDecoderSource : public LiveDecoderSource {
     explicit EffectDecoderSource(LiveDecoderSource* source);
 
     void prepareToPlay(float mix_freq) override;
-    void retrigger(int channel, float freq, int midi_velocity) override;
+    void retrigger(int channel, float freq, int midi_velocity, bool onset) override;
     Audio* audio() override;
     AudioBlock* audio_block(size_t index) override;
 
@@ -31,8 +31,8 @@ void EffectDecoderSource::prepareToPlay(float mix_freq) {
     source->prepareToPlay(mix_freq);
 }
 
-void EffectDecoderSource::retrigger(int channel, float freq, int midi_velocity) {
-    source->retrigger(channel, freq, midi_velocity);
+void EffectDecoderSource::retrigger(int channel, float freq, int midi_velocity, bool onset) {
+    source->retrigger(channel, freq, midi_velocity, onset);
 }
 
 Audio* EffectDecoderSource::audio() {
@@ -80,10 +80,10 @@ void EffectDecoder::prepareToPlay(float mix_freq) {
     chain_decoder->prepareToPlay(mix_freq);
 }
 
-void EffectDecoder::retrigger(int channel, float freq, int midi_velocity) {
+void EffectDecoder::retrigger(int channel, float freq, int midi_velocity, bool onset) {
     g_assert(chain_decoder);
 
-    chain_decoder->retrigger(channel, freq, midi_velocity);
+    chain_decoder->retrigger(channel, freq, midi_velocity, onset);
 }
 
 void EffectDecoder::process(size_t n_values, const float* freq_in, float* audio_out) {

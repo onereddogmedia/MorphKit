@@ -146,11 +146,11 @@ void MorphKit::makeMorphPlan() {
     project->try_update_synth();
 }
 
-void MorphKitVoice::startNote(const float note_frequency, const int8_t midi_velocity) {
+void MorphKitVoice::startNote(const float note_frequency, const int8_t midi_velocity, bool onset) {
     if (mp_voice) {
         SpectMorph::MorphOutputModule* output_module = mp_voice->output();
         if (output_module) {
-            output_module->retrigger(0, note_frequency, midi_velocity);
+            output_module->retrigger(0, note_frequency, midi_velocity, onset);
         }
     }
 }

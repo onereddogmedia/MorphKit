@@ -21,7 +21,7 @@ class MorphOutputModule : public MorphOperatorModule {
     void set_config(const MorphOperatorConfig* op_cfg);
     void process(size_t n_samples, float** values, size_t n_ports, const float* freq_in = nullptr);
     void prepareToPlay(float mix_freq);
-    void retrigger(int channel, float freq, int midi_velocity);
+    void retrigger(int channel, float freq, int midi_velocity, bool onset);
     void release();
 };
 

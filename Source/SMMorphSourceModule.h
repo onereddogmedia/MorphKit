@@ -29,7 +29,7 @@ class SimpleWavSetSource : public LiveDecoderSource {
     void set_wav_set(WavSetRepo* wave_set_repo, const std::string& path);
     void prepareToPlay(float mix_freq) override;
 
-    void retrigger(int channel, float freq, int midi_velocity) override;
+    void retrigger(int channel, float freq, int midi_velocity, bool onset) override;
     Audio* audio() override;
     AudioBlock* audio_block(size_t index) override;
 };

@@ -220,7 +220,7 @@ inline void internal_fast_vector_sincosf(const VectorSinParams& params, float* s
          *   state_re * inc_re - state_im * inc_im + i * (state_re * inc_im + state_im * inc_re)
          */
         F4Vector* new_im = reinterpret_cast<F4Vector*>(sin_begin + n);
-        F4Vector* new_re = reinterpret_cast<F4Vector*>(cos_begin + n);
+        F4Vector* new_re = NEED_COS ? reinterpret_cast<F4Vector*>(cos_begin + n) : nullptr;
         for (int k = 0; k < TABLE_SIZE; k++) {
             if (MODE == VectorSinParams::ADD) {
                 if (NEED_COS) {
@@ -342,13 +342,13 @@ double db_to_factor(double dB);
 double db_from_factor(double factor, double min_dB);
 
 #if defined(__i386__) && defined(__GNUC__)
-static inline int G_GNUC_CONST sm_ftoi(register float f) {
+static inline int G_GNUC_CONST sm_ftoi(float f) {
     int r;
 
     __asm__("fistl %0" : "=m"(r) : "t"(f));
     return r;
 }
-static inline int G_GNUC_CONST sm_dtoi(register double f) {
+static inline int G_GNUC_CONST sm_dtoi(double f) {
     int r;
 
     __asm__("fistl %0" : "=m"(r) : "t"(f));
@@ -367,7 +367,7 @@ inline int sm_round_positive(double d) {
 }
 
 inline int sm_round_positive(float f) {
-    return int(f + 0.5);
+    return int(f + 0.5f);
 }
 #endif
 

@@ -44,7 +44,7 @@ void SimpleWavSetSource::set_wav_set(WavSetRepo* wave_set_repo, const string& pa
 void SimpleWavSetSource::prepareToPlay(float /*mix_freq*/) {
 }
 
-void SimpleWavSetSource::retrigger(int channel, float freq, int midi_velocity) {
+void SimpleWavSetSource::retrigger(int channel, float freq, int midi_velocity, bool) {
     Audio* best_audio = nullptr;
     float best_diff = 1e10;
 

@@ -38,7 +38,7 @@ class MorphGridModule : public MorphOperatorModule {
         MorphGridModule* module;
 
         void prepareToPlay(float mix_freq) override;
-        void retrigger(int channel, float freq, int midi_velocity) override;
+        void retrigger(int channel, float freq, int midi_velocity, bool onset) override;
         Audio* audio() override;
         AudioBlock* audio_block(size_t index) override;
     } my_source;

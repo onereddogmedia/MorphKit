@@ -88,10 +88,10 @@ void MorphOutputModule::prepareToPlay(float mix_freq) {
     }
 }
 
-void MorphOutputModule::retrigger(int channel, float freq, int midi_velocity) {
+void MorphOutputModule::retrigger(int channel, float freq, int midi_velocity, bool onset) {
     for (size_t port = 0; port < CHANNEL_OP_COUNT; port++) {
         if (out_decoders[port]) {
-            out_decoders[port]->retrigger(channel, freq, midi_velocity);
+            out_decoders[port]->retrigger(channel, freq, midi_velocity, onset);
         }
     }
 }

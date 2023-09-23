@@ -71,12 +71,12 @@ void MorphGridModule::MySource::prepareToPlay(float mix_freq) {
     }
 }
 
-void MorphGridModule::MySource::retrigger(int channel, float freq, int midi_velocity) {
+void MorphGridModule::MySource::retrigger(int channel, float freq, int midi_velocity, bool onset) {
     for (unsigned int x = 0; x < module->cfg->width; x++) {
         for (unsigned int y = 0; y < module->cfg->height; y++) {
             InputNode& node = module->input_node[x][y];
             if (node.has_source) {
-                node.source.retrigger(channel, freq, midi_velocity);
+                node.source.retrigger(channel, freq, midi_velocity, onset);
             }
         }
     }

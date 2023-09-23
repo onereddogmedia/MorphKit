@@ -119,6 +119,13 @@ void EncoderParams::setup_params(const WavData& wav_data, double new_fundamental
     frame_size = make_odd((size_t)(mix_freq * 0.001f * frame_size_ms));
     frame_step = (size_t)(mix_freq * 0.001f * frame_step_ms);
 
+    /*
+     * compute the actual frame size/step in ms used by the encoder based on the
+     * number of samples and the sample rate
+     */
+    frame_size_ms = frame_size * 1000.0f / mix_freq;
+    frame_step_ms = frame_step * 1000.0f / mix_freq;
+
     /* compute block size from frame size (smallest 2^k value >= frame_size) */
     block_size = 1;
     while (block_size < frame_size)

@@ -39,7 +39,7 @@ class MorphKitVoice {
     MorphKitVoice(MorphPlanPtr plan) : mp_voice(nullptr), morph_plan(plan) {
     }
 
-    void startNote(const float note_frequency, const int8_t midi_velocity);
+    void startNote(const float note_frequency, const int8_t midi_velocity, bool onset);
     void setControl(const double x, const double y, const double gain_a, const double gain_b, const double gain_c,
                     const double gain_d);
     void prepareToPlay(const size_t voice_id);

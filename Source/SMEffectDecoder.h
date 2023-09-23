@@ -28,7 +28,7 @@ class EffectDecoder {
     void set_config(const MorphOutput::Config* cfg);
     void prepareToPlay(float mix_freq);
 
-    void retrigger(int channel, float freq, int midi_velocity);
+    void retrigger(int channel, float freq, int midi_velocity, bool onset);
     void process(size_t n_values, const float* freq_in, float* audio_out);
     void release();
 };

@@ -34,7 +34,7 @@ class LiveDecoder {
     LiveDecoderSource* source;
     PolyPhaseInter* pp_inter;
 
-    size_t frame_size, frame_step;
+    double frame_step;
     size_t zero_values_at_start_scaled;
     size_t loop_start_scaled;
     size_t loop_end_scaled;
@@ -70,7 +70,7 @@ class LiveDecoder {
 
     void prepareToPlay(float mix_freq);
 
-    void retrigger(int channel, float freq, int midi_velocity);
+    void retrigger(int channel, float freq, int midi_velocity, bool onset);
     void process(size_t n_values, const float* freq_in, float* audio_out);
 
     double current_pos() const;

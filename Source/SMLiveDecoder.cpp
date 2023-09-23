@@ -87,17 +87,20 @@ void LiveDecoder::prepareToPlay(float mix_freq) {
     sse_samples = new AlignedArray<float, 16>(block_size);
 }
 
-void LiveDecoder::retrigger(int channel, float freq, int midi_velocity) {
+void LiveDecoder::retrigger(int channel, float freq, int midi_velocity, bool onset) {
     Audio* best_audio = nullptr;
 
+    if (audio && !onset) {
+        return;
+    }
+
     if (source) {
-        source->retrigger(channel, freq, midi_velocity);
+        source->retrigger(channel, freq, midi_velocity, onset);
         best_audio = source->audio();
     }
     audio = best_audio;
 
     if (best_audio) {
-        frame_size = (size_t)(audio->frame_size_ms * current_mix_freq / 1000);
         frame_step = (size_t)(audio->frame_step_ms * current_mix_freq / 1000);
         zero_values_at_start_scaled = (size_t)(audio->zero_values_at_start * current_mix_freq / audio->mix_freq);
         loop_start_scaled = (size_t)(audio->loop_start * current_mix_freq / audio->mix_freq);
@@ -171,7 +174,7 @@ void LiveDecoder::process_internal(size_t n_values, float* audio_out, float port
                     xenv_pos = (xenv_pos - loop_start_scaled) % (loop_end_scaled - loop_start_scaled);
                     xenv_pos += loop_start_scaled;
                 }
-                frame_idx = xenv_pos / frame_step;
+                frame_idx = (size_t)((double)xenv_pos / frame_step);
             } else if (get_loop_type() == Audio::LOOP_FRAME_FORWARD || get_loop_type() == Audio::LOOP_FRAME_PING_PONG) {
                 frame_idx = compute_loop_frame_index((size_t)(env_pos / frame_step), audio);
             } else {
