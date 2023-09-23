@@ -1,3 +1,5 @@
+// Licensed GNU LGPL v2.1 or later: http://www.gnu.org/licenses/lgpl-2.1.html
+
 #ifndef SPECTMORPH_MORPHKIT_HH
 #define SPECTMORPH_MORPHKIT_HH
 
