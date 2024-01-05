@@ -53,9 +53,7 @@ void OutFile::end_section() {
 }
 
 void OutFile::write_raw_string(const string& s) {
-    for (size_t i = 0; i < s.size(); i++)
-        file->put_byte(s[i]);
-    file->put_byte(0);
+    file->write(s.c_str(), s.size() + 1);
 }
 
 void OutFile::write_raw_int(int i) {
@@ -108,7 +106,7 @@ void OutFile::write_float_block(const string& s, const vector<float>& fb) {
     file->write(fb.data(), fb.size() * 4);
 }
 
-void OutFile::write_uint16_block(const string& s, const AudioBlock::Block& ib) {
+void OutFile::write_uint16_block(const string& s, const vector<uint16_t>& ib) {
     file->put_byte('6');
 
     write_raw_string(s);

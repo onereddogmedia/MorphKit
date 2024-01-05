@@ -4,7 +4,6 @@
 #define SPECTMORPH_PROJECT_HH
 
 #include "SMMorphPlan.h"
-#include "SMObject.h"
 #include "SMWavSet.h"
 
 #include <mutex>
@@ -46,25 +45,27 @@ class ControlEventVector {
   public:
     void take(SynthControlEvent* ev);
     void run_rt(Project* project);
+    void destroy_all_events();
 };
 
 class Project : public SignalReceiver {
   public:
     enum class StorageModel { COPY, REFERENCE };
 
+    static constexpr size_t WAV_SETS_RESERVE = 256;
+
   private:
     std::vector<std::shared_ptr<WavSet>> wav_sets;
 
     std::unique_ptr<MidiSynth> m_midi_synth;
     double m_mix_freq = 0;
-    RefPtr<MorphPlan> m_morph_plan;
+    MorphPlan m_morph_plan;
     std::vector<unsigned char> m_last_plan_data;
     bool m_state_changed_notify = false;
 
     std::mutex m_synth_mutex;
-    ControlEventVector m_control_events;   // protected by synth mutex
-    std::vector<std::string> m_out_events; // protected by synth mutex
-    bool m_state_changed = false;          // protected by synth mutex
+    ControlEventVector m_control_events; // protected by synth mutex
+    bool m_state_changed = false;        // protected by synth mutex
 
     std::unique_ptr<SynthInterface> m_synth_interface;
 
@@ -104,10 +105,9 @@ class Project : public SignalReceiver {
     void state_changed();
     bool voices_active();
 
-    std::vector<std::string> notify_take_events();
     SynthInterface* synth_interface() const;
     MidiSynth* midi_synth() const;
-    MorphPlanPtr morph_plan() const;
+    MorphPlan* morph_plan();
 
     Signal<double> signal_volume_changed;
 };

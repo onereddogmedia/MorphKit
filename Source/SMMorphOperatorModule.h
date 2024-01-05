@@ -5,6 +5,9 @@
 
 #include "SMLiveDecoderSource.h"
 #include "SMMorphOperator.h"
+#include "SMRTMemory.h"
+#include "SMRandom.h"
+#include "SMTimeInfo.h"
 
 #include <string>
 
@@ -12,15 +15,24 @@ namespace SpectMorph {
 
 class MorphPlanVoice;
 
+class MorphModuleSharedState {
+  public:
+    MorphModuleSharedState();
+    virtual ~MorphModuleSharedState();
+};
+
 class MorphOperatorModule {
   protected:
     MorphPlanVoice* morph_plan_voice;
-    std::vector<MorphOperatorModule*> m_dependencies;
-    int m_update_value_tag;
     MorphOperator::PtrID m_ptr_id;
+    float m_notify_value = 0;
+    bool m_have_notify_value = false;
 
-    void clear_dependencies();
-    void add_dependency(MorphOperatorModule* dep_mod);
+    Random* random_gen() const;
+    RTMemoryArea* rt_memory_area() const;
+    TimeInfo time_info() const;
+    float apply_modulation(const ModulationData& mod_data) const;
+    void set_notify_value(float value);
 
   public:
     MorphOperatorModule(MorphPlanVoice* voice);
@@ -30,10 +42,13 @@ class MorphOperatorModule {
     virtual void prepareToPlay(float mix_freq);
     virtual LiveDecoderSource* source();
     virtual float value();
+    virtual void reset_value(const TimeInfo& time_info);
+    virtual void update_shared_state(const TimeInfo& time_info);
+    virtual MorphModuleSharedState* create_shared_state();
+    virtual void set_shared_state(MorphModuleSharedState* new_shared_state);
 
-    const std::vector<MorphOperatorModule*>& dependencies() const;
-    int& update_value_tag();
     void set_ptr_id(MorphOperator::PtrID ptr_id);
+    bool get_notify_value(float& value);
 
     static MorphOperatorModule* create(const std::string& type, MorphPlanVoice* voice);
 };

@@ -28,17 +28,9 @@ SimpleWavSetSource::~SimpleWavSetSource() {
     active_audio = nullptr;
 }
 
-void SimpleWavSetSource::set_wav_set(WavSetRepo* wave_set_repo, const string& path) {
-    if (wave_set_repo) {
-        WavSet* new_wav_set = wave_set_repo->get(path);
-        if (new_wav_set != wav_set) {
-            wav_set = new_wav_set;
-            active_audio = nullptr;
-        }
-    } else {
-        wav_set = nullptr;
-        active_audio = nullptr;
-    }
+void SimpleWavSetSource::set_wav_set(WavSet* new_wav_set) {
+    wav_set = new_wav_set;
+    active_audio = nullptr;
 }
 
 void SimpleWavSetSource::prepareToPlay(float /*mix_freq*/) {
@@ -50,7 +42,6 @@ void SimpleWavSetSource::retrigger(int channel, float freq, int midi_velocity, b
 
     if (wav_set) {
         float note = freq_to_note(freq);
-        // TODO: use of deallocated memory!
         for (vector<WavSetWave>::iterator wi = wav_set->waves.begin(); wi != wav_set->waves.end(); wi++) {
             Audio* audio = wi->audio;
             if (audio && wi->channel == channel && wi->velocity_range_min <= midi_velocity &&
@@ -70,17 +61,21 @@ Audio* SimpleWavSetSource::audio() {
     return active_audio;
 }
 
-AudioBlock* SimpleWavSetSource::audio_block(size_t index) {
+bool SimpleWavSetSource::rt_audio_block(size_t index, RTAudioBlock& out_block) {
     if (active_audio) {
         if (active_audio->end > 0) {
-            if (index < (size_t)active_audio->end && index < active_audio->contents.size())
-                return &active_audio->contents[index];
+            if (index < (size_t)active_audio->end && index < active_audio->contents.size()) {
+                out_block.assign(active_audio->contents[index]);
+                return true;
+            }
         } else {
-            if (index < active_audio->contents.size())
-                return &active_audio->contents[index];
+            if (index < active_audio->contents.size()) {
+                out_block.assign(active_audio->contents[index]);
+                return true;
+            }
         }
     }
-    return nullptr;
+    return false;
 }
 
 MorphSourceModule::MorphSourceModule(MorphPlanVoice* voice) : MorphOperatorModule(voice) {
@@ -98,5 +93,5 @@ LiveDecoderSource* MorphSourceModule::source() {
 void MorphSourceModule::set_config(const MorphOperatorConfig* op_cfg) {
     auto cfg = dynamic_cast<const MorphSource::Config*>(op_cfg);
 
-    my_source.set_wav_set(cfg->wav_set_repo, cfg->path);
+    my_source.set_wav_set(cfg->wav_set);
 }

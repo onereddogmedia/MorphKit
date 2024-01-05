@@ -1,9 +1,8 @@
-// Licensed GNU LGPL v3 or later: http://www.gnu.org/licenses/lgpl.html
+// Licensed GNU LGPL v2.1 or later: http://www.gnu.org/licenses/lgpl-2.1.html
 
 #include "SMStdioIn.h"
 #include "SMLeakDebugger.h"
 #include "SMStdioSubIn.h"
-
 #include <assert.h>
 #include <stdio.h>
 
@@ -29,8 +28,6 @@ StdioIn::StdioIn(FILE* f, const string& filename_) : file(f), filename(filename_
 }
 
 StdioIn::~StdioIn() {
-    assert(file);
-    fclose(file);
     leak_debugger.del(this);
 }
 
@@ -48,7 +45,7 @@ bool StdioIn::skip(size_t size) {
     return false;
 }
 
-unsigned char* StdioIn::mmap_mem(size_t&) {
+const unsigned char* StdioIn::mmap_mem(size_t&) {
     return nullptr;
 }
 

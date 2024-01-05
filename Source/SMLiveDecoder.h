@@ -14,25 +14,31 @@
 namespace SpectMorph {
 
 class LiveDecoder {
+    static constexpr size_t PARTIAL_STATE_RESERVE = 2048; // maximum number of partials to expect
+    static constexpr size_t MAX_N_VALUES = 64;            // maximum number of values to process at once
+
     struct PartialState {
         float freq;
         float phase;
     };
-    std::experimental::fixed_capacity_vector<PartialState, AudioBlock::block_size> pstate[2], *last_pstate;
+    std::vector<PartialState> pstate[2], *last_pstate;
 
     struct PortamentoState {
-        std::experimental::fixed_capacity_vector<float, 32768> buffer;
+        std::vector<float> buffer;
         double pos;
         bool active;
 
         enum { DELTA = 32 };
     } portamento_state;
 
+    WavSet* smset;
     Audio* audio;
 
+    size_t block_size;
     IFFTSynth* ifft_synth;
     LiveDecoderSource* source;
     PolyPhaseInter* pp_inter;
+    RTMemoryArea* rt_memory_area = nullptr;
 
     double frame_step;
     size_t zero_values_at_start_scaled;
@@ -40,19 +46,18 @@ class LiveDecoder {
     size_t loop_end_scaled;
     int loop_point;
     float current_freq;
-    float current_mix_freq;
+    float mix_freq;
 
     size_t have_samples;
-    size_t block_size;
     size_t pos;
     double env_pos;
     size_t frame_idx;
-    double original_samples_norm_factor;
 
     AlignedArray<float, 16>* sse_samples;
 
     // timing related
     double start_env_pos = 0;
+    bool in_process = false;
 
     Audio::LoopType get_loop_type();
 
@@ -65,18 +70,24 @@ class LiveDecoder {
     LiveDecoder();
 
   public:
-    LiveDecoder(LiveDecoderSource* source);
+    LiveDecoder(float mix_freq);
+    LiveDecoder(WavSet* smset, float mix_freq);
+    LiveDecoder(LiveDecoderSource* source, float mix_freq);
     ~LiveDecoder();
+
+    void set_source(LiveDecoderSource* source);
 
     void prepareToPlay(float mix_freq);
 
     void retrigger(int channel, float freq, int midi_velocity, bool onset);
-    void process(size_t n_values, const float* freq_in, float* audio_out);
+    void process(RTMemoryArea& rt_memory_area, size_t n_values, const float* freq_in, float* audio_out);
 
     double current_pos() const;
     double fundamental_note() const;
 
     static size_t compute_loop_frame_index(size_t index, Audio* audio);
+
+    double time_offset_ms() const;
 };
 
 } // namespace SpectMorph

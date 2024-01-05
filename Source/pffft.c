@@ -854,8 +854,8 @@ static void radf5_ps(int ido, int l1, const v4sf* RESTRICT cc, v4sf* RESTRICT ch
         tr4, tr5;
     int idp2;
 
-#define cc_ref(a_1, a_2, a_3) cc[((a_3)*l1 + (a_2)) * ido + a_1]
-#define ch_ref(a_1, a_2, a_3) ch[((a_3)*5 + (a_2)) * ido + a_1]
+#define cc_ref(a_1, a_2, a_3) cc[((a_3) * l1 + (a_2)) * ido + a_1]
+#define ch_ref(a_1, a_2, a_3) ch[((a_3) * 5 + (a_2)) * ido + a_1]
 
     /* Parameter adjustments */
     ch_offset = 1 + ido * 6;
@@ -942,8 +942,8 @@ static void radb5_ps(int ido, int l1, const v4sf* RESTRICT cc, v4sf* RESTRICT ch
         tr4, tr5;
     int idp2;
 
-#define cc_ref(a_1, a_2, a_3) cc[((a_3)*5 + (a_2)) * ido + a_1]
-#define ch_ref(a_1, a_2, a_3) ch[((a_3)*l1 + (a_2)) * ido + a_1]
+#define cc_ref(a_1, a_2, a_3) cc[((a_3) * 5 + (a_2)) * ido + a_1]
+#define ch_ref(a_1, a_2, a_3) ch[((a_3) * l1 + (a_2)) * ido + a_1]
 
     /* Parameter adjustments */
     ch_offset = 1 + ido * (1 + l1);

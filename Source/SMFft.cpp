@@ -1,8 +1,8 @@
 // Licensed GNU LGPL v2.1 or later: http://www.gnu.org/licenses/lgpl-2.1.html
 
 #include "SMFft.h"
-#include "SMUtils.h"
 #include "SMRandom.h"
+#include "SMUtils.h"
 #include <algorithm>
 
 #include "glib.h"

@@ -5,6 +5,7 @@
 
 #include "SMInFile.h"
 #include "SMOutFile.h"
+#include "SMProperty.h"
 #include "SMSignal.h"
 #include "SMWavSetRepo.h"
 
@@ -14,21 +15,12 @@
 namespace SpectMorph {
 
 struct MorphOperatorConfig {
-    MorphOperatorConfig() : wav_set_repo(nullptr) {
+    MorphOperatorConfig() {
     }
-    MorphOperatorConfig(const MorphOperatorConfig& other) : wav_set_repo(other.wav_set_repo) {
-    }
-    MorphOperatorConfig& operator=(MorphOperatorConfig&& other) {
-        if (this != &other) {
-            wav_set_repo = other.wav_set_repo;
-        }
-        return *this;
+    MorphOperatorConfig(const MorphOperatorConfig&) {
     }
     virtual ~MorphOperatorConfig();
-    WavSetRepo* wav_set_repo;
 };
-
-typedef std::shared_ptr<MorphOperatorConfig> MorphOperatorConfigP;
 
 class MorphOperatorView;
 class MorphPlan;
@@ -42,6 +34,35 @@ class MorphOperator : public SignalReceiver {
     MorphPlan* m_morph_plan;
     std::string m_name;
     std::string m_id;
+    bool m_folded;
+    std::map<std::string, std::unique_ptr<Property>> m_properties;
+
+    LogProperty* add_property_log(float* value, const std::string& identifier, const std::string& label,
+                                  const std::string& value_label, float def, float mn, float mx);
+    LogProperty* add_property_log(ModulationData* mod_data, const std::string& identifier, const std::string& label,
+                                  const std::string& value_label, float def, float mn, float mx);
+    XParamProperty* add_property_xparam(float* value, const std::string& identifier, const std::string& label,
+                                        const std::string& value_label, float def, float mn, float mx, float slope);
+    LinearProperty* add_property(float* value, const std::string& identifier, const std::string& label,
+                                 const std::string& value_label, float def, float mn, float mx);
+    LinearProperty* add_property(ModulationData* mod_data, const std::string& identifier, const std::string& label,
+                                 const std::string& value_label, float def, float mn, float mx);
+    IntProperty* add_property(int* value, const std::string& identifier, const std::string& label,
+                              const std::string& value_label, int def, int mn, int mx);
+    IntVecProperty* add_property(int* value, const std::string& identifier, const std::string& label,
+                                 const std::string& value_label, int def, const std::vector<int>& vec);
+    BoolProperty* add_property(bool* value, const std::string& identifier, const std::string& label, bool def);
+    template <typename Enum>
+    EnumProperty* add_property_enum(Enum* value, const std::string& identifier, const std::string& label, int def,
+                                    const EnumInfo& ei) {
+        return add_property_enum(
+            identifier, label, def, ei, [value]() { return *value; },
+            [value](int new_value) { *value = static_cast<Enum>(new_value); });
+    }
+
+    EnumProperty* add_property_enum(const std::string& identifier, const std::string& label, int def,
+                                    const EnumInfo& ei, std::function<int()> read_func,
+                                    std::function<void(int)> write_func);
 
   public:
     enum OutputType { OUTPUT_NONE, OUTPUT_AUDIO, OUTPUT_CONTROL };
@@ -68,6 +89,11 @@ class MorphOperator : public SignalReceiver {
     virtual std::vector<MorphOperator*> dependencies();
     virtual MorphOperatorConfig* clone_config() = 0;
 
+    void get_property_dependencies(std::vector<MorphOperator*>& deps, const std::vector<std::string>& identifiers);
+    void register_property(Property* property);
+
+    Property* property(const std::string& identifier);
+
     MorphPlan* morph_plan();
 
     std::string type_name();
@@ -79,6 +105,9 @@ class MorphOperator : public SignalReceiver {
 
     std::string id();
     void set_id(const std::string& id);
+
+    bool folded() const;
+    void set_folded(bool folded);
 
     PtrID ptr_id() const {
         /* ptr_id is derived from MorphOperator*, which means that for a given

@@ -24,21 +24,32 @@ class MorphKit {
     void setModel(const uint model, const std::string& name);
     void setLinear(const float value);
 
-    MorphPlanPtr morph_plan() {
+    MorphPlan* morph_plan() {
         return project->morph_plan();
     }
 
-    void wavSetReload();
+    TimeInfoGenerator* time_info() {
+        return &m_time_info_gen;
+    }
+
+    RTMemoryArea* memory_area() {
+        return &rt_memory_area;
+    }
+
+    void reloadWavSet();
 
   private:
     void makeMorphPlan();
 
     std::unique_ptr<SpectMorph::Project> project;
+    TimeInfoGenerator m_time_info_gen;
+    RTMemoryArea rt_memory_area;
 };
 
 class MorphKitVoice {
   public:
-    MorphKitVoice(MorphPlanPtr plan) : mp_voice(nullptr), morph_plan(plan) {
+    MorphKitVoice(MorphPlan* plan, TimeInfoGenerator* time, RTMemoryArea* memory)
+        : mp_voice(nullptr), morph_plan(plan), m_time_info_gen(time), rt_memory_area(memory) {
     }
 
     void startNote(const float note_frequency, const int8_t midi_velocity, bool onset);
@@ -52,7 +63,9 @@ class MorphKitVoice {
 
   private:
     MorphPlanVoice* mp_voice;
-    MorphPlanPtr morph_plan;
+    MorphPlan* morph_plan;
+    TimeInfoGenerator* m_time_info_gen;
+    RTMemoryArea* rt_memory_area;
 };
 
 class MorphKitEncoder {

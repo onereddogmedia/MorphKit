@@ -19,8 +19,11 @@ static LeakDebugger leak_debugger("SpectMorph::LiveDecoder");
 #define ANTIALIAS_FILTER_TABLE_SIZE 256
 
 static vector<float> antialias_filter_table;
+static std::mutex aa_mutex;
 
 static void init_aa_filter() {
+    std::lock_guard lg(aa_mutex);
+
     if (antialias_filter_table.empty()) {
         antialias_filter_table.resize(ANTIALIAS_FILTER_TABLE_SIZE);
 
@@ -35,13 +38,36 @@ static inline double fmatch(double f1, double f2) {
     return f2 < (f1 * 1.05) && f2 > (f1 * 0.95);
 }
 
-LiveDecoder::LiveDecoder() : audio(nullptr), ifft_synth(nullptr), source(nullptr), sse_samples(nullptr) {
-    init_aa_filter();
-    pp_inter = new PolyPhaseInter();
-    leak_debugger.add(this);
+static inline double truncate_phase(double phase) {
+    // truncate phase to interval [0:2*pi]; like fmod (phase, 2 * M_PI) but faster
+    phase *= 1 / (2 * M_PI);
+    phase -= int(phase);
+    phase *= 2 * M_PI;
+
+    return phase;
 }
 
-LiveDecoder::LiveDecoder(LiveDecoderSource* source_) : LiveDecoder() {
+LiveDecoder::LiveDecoder(float mix_freq_)
+    : smset(nullptr), audio(nullptr), block_size(512), ifft_synth(nullptr), source(nullptr), mix_freq(mix_freq_),
+      sse_samples(nullptr) {
+    leak_debugger.add(this);
+
+    init_aa_filter();
+
+    /* avoid malloc during synthesis */
+    pstate[0].reserve(PARTIAL_STATE_RESERVE);
+    pstate[1].reserve(PARTIAL_STATE_RESERVE);
+
+    portamento_state.buffer.reserve(MAX_N_VALUES * 16 /* 4 octaves */ + 256 /* buffer shrink boundary */ + 100);
+
+    pp_inter = PolyPhaseInter::the(); // do not delete
+}
+
+LiveDecoder::LiveDecoder(WavSet* smset_, float mix_freq_) : LiveDecoder(mix_freq_) {
+    this->smset = smset_;
+}
+
+LiveDecoder::LiveDecoder(LiveDecoderSource* source_, float mix_freq_) : LiveDecoder(mix_freq_) {
     this->source = source_;
 }
 
@@ -53,10 +79,6 @@ LiveDecoder::~LiveDecoder() {
     if (sse_samples) {
         delete sse_samples;
         sse_samples = nullptr;
-    }
-    if (pp_inter) {
-        delete pp_inter;
-        pp_inter = nullptr;
     }
     leak_debugger.del(this);
 }
@@ -70,8 +92,8 @@ static size_t preferred_block_size(double mix_freq) {
     return bs;
 }
 
-void LiveDecoder::prepareToPlay(float mix_freq) {
-    current_mix_freq = mix_freq;
+void LiveDecoder::prepareToPlay(float mix_freq_) {
+    mix_freq = mix_freq_;
 
     if (source) {
         source->prepareToPlay(mix_freq);
@@ -89,29 +111,45 @@ void LiveDecoder::prepareToPlay(float mix_freq) {
 
 void LiveDecoder::retrigger(int channel, float freq, int midi_velocity, bool onset) {
     Audio* best_audio = nullptr;
-
-    if (audio && !onset) {
-        return;
-    }
+    double best_diff = 1e10;
 
     if (source) {
         source->retrigger(channel, freq, midi_velocity, onset);
         best_audio = source->audio();
-    }
-    audio = best_audio;
+    } else {
+        if (smset) {
+            float note = sm_freq_to_note(freq);
 
+            // find best audio candidate
+            for (vector<WavSetWave>::iterator wi = smset->waves.begin(); wi != smset->waves.end(); wi++) {
+                Audio* audio_ = wi->audio;
+                if (audio_ && wi->channel == channel && wi->velocity_range_min <= midi_velocity &&
+                    wi->velocity_range_max >= midi_velocity) {
+                    float audio_note = sm_freq_to_note(audio_->fundamental_freq);
+
+                    if (fabs(audio_note - note) < best_diff) {
+                        best_diff = fabs(audio_note - note);
+                        best_audio = audio_;
+                    }
+                }
+            }
+        }
+    }
     if (best_audio) {
-        frame_step = (size_t)(audio->frame_step_ms * current_mix_freq / 1000);
-        zero_values_at_start_scaled = (size_t)(audio->zero_values_at_start * current_mix_freq / audio->mix_freq);
-        loop_start_scaled = (size_t)(audio->loop_start * current_mix_freq / audio->mix_freq);
-        loop_end_scaled = (size_t)(audio->loop_end * current_mix_freq / audio->mix_freq);
+        audio = best_audio;
+
+        frame_step = audio->frame_step_ms * mix_freq / 1000;
+        zero_values_at_start_scaled = (size_t)(audio->zero_values_at_start * mix_freq / audio->mix_freq);
+        loop_start_scaled = (size_t)(audio->loop_start * mix_freq / audio->mix_freq);
+        loop_end_scaled = (size_t)(audio->loop_end * mix_freq / audio->mix_freq);
         loop_point = (get_loop_type() == Audio::LOOP_NONE) ? -1 : audio->loop_start;
+
+        zero_float_block(block_size, &(*sse_samples)[0]);
 
         have_samples = 0;
         pos = 0;
         frame_idx = 0;
         env_pos = 0;
-        original_samples_norm_factor = db_to_factor(audio->original_samples_norm_db);
 
         // reset partial state vectors
         pstate[0].clear();
@@ -123,8 +161,17 @@ void LiveDecoder::retrigger(int channel, float freq, int midi_velocity, bool ons
 
         portamento_state.pos = PortamentoState::DELTA;
         portamento_state.buffer.resize(PortamentoState::DELTA);
+        portamento_state.active = false;
     }
+
     current_freq = freq;
+}
+
+void LiveDecoder::set_source(LiveDecoderSource* source_) {
+    if (source_ != this->source) {
+        this->source = source_;
+        audio = nullptr; /* stop playback */
+    }
 }
 
 size_t LiveDecoder::compute_loop_frame_index(size_t frame_idx, Audio* audio) {
@@ -182,16 +229,15 @@ void LiveDecoder::process_internal(size_t n_values, float* audio_out, float port
                 if (loop_point != -1 && frame_idx > size_t(loop_point)) /* if in loop mode: loop current frame */
                     frame_idx = (size_t)loop_point;
             }
-
-            AudioBlock* audio_block_ptr = nullptr;
+            RTAudioBlock audio_block(rt_memory_area);
+            bool have_audio_block = false;
             if (source) {
-                audio_block_ptr = source->audio_block(frame_idx);
+                have_audio_block = source->rt_audio_block(frame_idx, audio_block);
             } else if (frame_idx < audio->contents.size()) {
-                audio_block_ptr = &audio->contents[frame_idx];
+                audio_block.assign(audio->contents[frame_idx]);
+                have_audio_block = true;
             }
-            if (audio_block_ptr) {
-                const AudioBlock& audio_block = *audio_block_ptr;
-
+            if (have_audio_block) {
                 assert(audio_block.freqs.size() == audio_block.mags.size());
 
                 ifft_synth->clear_partials();
@@ -199,15 +245,15 @@ void LiveDecoder::process_internal(size_t n_values, float* audio_out, float port
                 // point n_pstate to pstate[0] and pstate[1] alternately (one holds points to last state and the other
                 // points to new state)
                 bool lps_zero = (last_pstate == &pstate[0]);
-                auto& new_pstate = lps_zero ? pstate[1] : pstate[0];
-                const auto& old_pstate = lps_zero ? pstate[0] : pstate[1];
+                vector<PartialState>& new_pstate = lps_zero ? pstate[1] : pstate[0];
+                const vector<PartialState>& old_pstate = lps_zero ? pstate[0] : pstate[1];
 
                 new_pstate.clear(); // clear old partial state
 
-                const double phase_factor = block_size * M_PI / current_mix_freq;
+                const double phase_factor = block_size * M_PI / mix_freq;
                 const double filter_fact =
-                    18000.0 / current_mix_freq; // filter at 18 kHz (higher mix freq => higher filter)
-                const double filter_min_freq = filter_fact * current_mix_freq;
+                    18000.0 / 44100.0; // for 44.1 kHz, filter at 18 kHz (higher mix freq => higher filter)
+                const double filter_min_freq = filter_fact * mix_freq;
 
                 size_t old_partial = 0;
                 for (size_t partial = 0; partial < audio_block.freqs.size(); partial++) {
@@ -222,7 +268,7 @@ void LiveDecoder::process_internal(size_t n_values, float* audio_out, float port
                     //  => this means the aliasing starts at lower frequencies
                     const double portamento_freq = freq * max(portamento_stretch, 1.0f);
                     if (portamento_freq > filter_min_freq) {
-                        double norm_freq = portamento_freq / current_mix_freq;
+                        double norm_freq = portamento_freq / mix_freq;
                         if (norm_freq > 0.5) {
                             // above nyquist freq -> since partials are sorted, there is nothing more to do for this
                             // frame
@@ -236,6 +282,8 @@ void LiveDecoder::process_internal(size_t n_values, float* audio_out, float port
                                     mag *= (double)antialias_filter_table[(size_t)index];
                                 else
                                     mag = 0;
+                            } else {
+                                // filter magnitude is supposed to be 1.0
                             }
                         }
                     }
@@ -265,7 +313,7 @@ void LiveDecoder::process_internal(size_t n_values, float* audio_out, float port
                         const double lfreq = old_pstate[old_partial].freq;
                         const double lphase = old_pstate[old_partial].phase;
 
-                        phase = fmod(lphase + lfreq * phase_factor, 2 * M_PI);
+                        phase = truncate_phase(lphase + lfreq * phase_factor);
                     }
                     ifft_synth->render_partial(freq, mag, phase);
 
@@ -281,9 +329,12 @@ void LiveDecoder::process_internal(size_t n_values, float* audio_out, float port
             }
             pos = 0;
             have_samples = block_size / 2;
+            rt_memory_area->free_all();
         }
 
+        g_assert(have_samples > 0);
         if (env_pos >= zero_values_at_start_scaled) {
+            // decode envelope
             size_t can_copy = min(have_samples, n_values - i);
 
             memcpy(audio_out + i, &(*sse_samples)[pos], sizeof(float) * can_copy);
@@ -324,7 +375,7 @@ void LiveDecoder::portamento_grow(double end_pos, float portamento_stretch) {
 }
 
 void LiveDecoder::portamento_shrink() {
-    auto& buffer = portamento_state.buffer;
+    vector<float>& buffer = portamento_state.buffer;
 
     /* avoid infinite state */
     if (buffer.size() > 256) {
@@ -339,22 +390,20 @@ void LiveDecoder::process_portamento(size_t n_values, const float* freq_in, floa
     assert(audio); // need selected (triggered) audio to use this function
 
     const double start_pos = portamento_state.pos;
-    const auto& buffer = portamento_state.buffer;
+    const vector<float>& buffer = portamento_state.buffer;
 
     if (!portamento_state.active) {
         if (freq_in && portamento_check(n_values, freq_in, current_freq))
             portamento_state.active = true;
     }
     if (portamento_state.active) {
-        const size_t max_n_values = (const size_t)(kMaxSampleRate * 0.010f);
-
-        float fake_freq_in[max_n_values];
+        float fake_freq_in[n_values];
         if (!freq_in) {
             std::fill(fake_freq_in, fake_freq_in + n_values, current_freq);
             freq_in = fake_freq_in;
         }
 
-        double pos_[max_n_values], end_pos = start_pos, current_step = 1;
+        double pos_[n_values], end_pos = start_pos, current_step = 1;
 
         for (size_t i = 0; i < n_values; i++) {
             pos_[i] = end_pos;
@@ -365,8 +414,11 @@ void LiveDecoder::process_portamento(size_t n_values, const float* freq_in, floa
         portamento_grow(end_pos, (float)current_step);
 
         /* interpolate from buffer (portamento) */
-        for (size_t i = 0; i < n_values; i++)
-            audio_out[i] = (float)pp_inter->get_sample_no_check(buffer, pos_[i]);
+        if (buffer.size() > 0) {
+            for (size_t i = 0; i < n_values; i++) {
+                audio_out[i] = (float)pp_inter->get_sample_no_check(buffer.data(), pos_[i]);
+            }
+        }
     } else {
         /* no portamento: just compute & copy values */
         portamento_grow(start_pos + n_values, 1);
@@ -377,19 +429,29 @@ void LiveDecoder::process_portamento(size_t n_values, const float* freq_in, floa
     portamento_shrink();
 }
 
-void LiveDecoder::process(size_t n_values, const float* freq_in, float* audio_out) {
+void LiveDecoder::process(RTMemoryArea& rt_memory_area_, size_t n_values, const float* freq_in, float* audio_out) {
+    if (source)
+        audio = source->audio(); // sources can stop providing audio data while playing
+
     if (!audio) // nothing loaded
     {
         std::fill(audio_out, audio_out + n_values, 0);
         return;
     }
+    /* required during processing */
+    assert(!this->rt_memory_area);
+    this->rt_memory_area = &rt_memory_area_;
+
     /* ensure that time_offset_ms() is only called during live decoder process */
+    assert(!in_process);
+    in_process = true;
     start_env_pos = env_pos;
     /*
-     * split processing into small blocks, max 10 ms
+     * split processing into small blocks
      *  -> limit n_values to keep portamento stretch settings up-to-date
+     *  -> provide accurate modulation data to filter
      */
-    const size_t max_n_values = (const size_t)(current_mix_freq * 0.010f);
+    const size_t max_n_values = MAX_N_VALUES;
 
     while (n_values > 0 && sse_samples && ifft_synth) {
         size_t todo_values = min(n_values, max_n_values);
@@ -402,6 +464,9 @@ void LiveDecoder::process(size_t n_values, const float* freq_in, float* audio_ou
         audio_out += todo_values;
         n_values -= todo_values;
     }
+
+    this->rt_memory_area = nullptr;
+    in_process = false;
 }
 
 Audio::LoopType LiveDecoder::get_loop_type() {
@@ -422,4 +487,15 @@ double LiveDecoder::fundamental_note() const {
         return -1;
 
     return sm_freq_to_note(audio->fundamental_freq);
+}
+
+double LiveDecoder::time_offset_ms() const {
+    /* LiveDecoder::process() produces samples by IFFTSynth - possibly more than once per block
+     *
+     * This function provides the time offset of the IFFTSynth call relative to the start of
+     * the sample block generated by process(). LFOs (and other operators) can use this
+     * information for jitter-free timing.
+     */
+    assert(in_process);
+    return 1000 * (env_pos - start_env_pos) / mix_freq;
 }

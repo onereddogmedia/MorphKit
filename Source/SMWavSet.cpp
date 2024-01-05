@@ -11,8 +11,8 @@
 
 #include <assert.h>
 
-using std::map;
 using std::set;
+using std::map;
 using std::string;
 using std::vector;
 
@@ -40,7 +40,7 @@ Error WavSet::save(const string& filename, bool embed_models) {
 
             MemOut mem_out(&data);
             waves[i].audio->save(&mem_out);
-            of.write_blob("audio", &data[0], data.size());
+            of.write_blob("audio", data.data(), data.size());
         } else if (embed_models) {
             FILE* in = fopen(waves[i].path.c_str(), "rb");
             if (in) {
@@ -49,7 +49,7 @@ Error WavSet::save(const string& filename, bool embed_models) {
                 size_t len;
 
                 do {
-                    len = fread(&buffer[0], 1, buffer.size(), in);
+                    len = fread(buffer.data(), 1, buffer.size(), in);
                     if ((long)len > 0)
                         data.insert(data.end(), buffer.begin(), buffer.begin() + (long)len);
                 } while (len > 0);
@@ -57,7 +57,7 @@ Error WavSet::save(const string& filename, bool embed_models) {
                 if (ferror(in)) {
                     fprintf(stderr, "wavset save: error reading file: %s\n", waves[i].path.c_str());
                 } else {
-                    of.write_blob("audio", &data[0], data.size());
+                    of.write_blob("audio", data.data(), data.size());
                 }
                 fclose(in);
             } else {
@@ -77,7 +77,7 @@ Error WavSet::load(const string& filename) {
     WavSetWave* wave = nullptr;
 
     string path;
-    string src = "/sources";
+    string src = "sources";
     std::string::size_type i = filename.find(src);
     if (i != std::string::npos) {
         string fn = filename;

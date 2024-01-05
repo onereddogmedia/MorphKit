@@ -36,7 +36,7 @@ class EncoderParams {
     float frame_size_ms = 0;
 
     /** lower bound for the amount of zero padding used during analysis */
-    size_t zeropad = 0;
+    int zeropad = 0;
 
     /** size of the frame step in samples */
     size_t frame_step = 0;

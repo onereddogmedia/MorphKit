@@ -130,6 +130,7 @@ template <typename K, typename V, template <typename...> class MAP> class lru_ca
 };
 
 class WavSetRepo {
+    std::mutex mutex;
     std::unique_ptr<lru_cache_using_std<std::string, std::shared_ptr<WavSet>, std::map>> wav_set_map;
 
   public:

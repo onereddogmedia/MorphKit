@@ -139,7 +139,7 @@ Error SpectMorph::Audio::load(GenericIn* file) {
                 }
             }
         } else if (ifile.event() == InFile::UINT16_BLOCK) {
-            auto ib = ifile.event_uint16_block();
+            const vector<uint16_t>& ib = ifile.event_uint16_block();
             if (ifile.event_name() == "freqs") {
                 std::copy(ib.begin(), ib.end(), std::back_inserter(audio_block->freqs));
 
@@ -308,7 +308,7 @@ void AudioBlock::sort_freqs() {
 
     // sort partials by frequency
     const size_t N = freqs.size();
-    PartialData pvec[1024];
+    PartialData pvec[N + AVOID_ARRAY_UB];
 
     for (size_t p = 0; p < N; p++) {
         pvec[p].freq = freqs[p];

@@ -26,6 +26,8 @@ MorphPlan::MorphPlan(Project& project) : m_project(&project) {
     in_restore = false;
     m_id = generate_id();
 
+    m_wav_set_repo = new WavSetRepo();
+
     leak_debugger.add(this);
 }
 
@@ -51,10 +53,14 @@ MorphPlan::~MorphPlan() {
 
     clear();
 
+    delete m_wav_set_repo;
+    m_wav_set_repo = nullptr;
+
     leak_debugger.del(this);
 }
 
-void MorphPlan::add_operator(MorphOperator* op, AddPos add_pos, const string& load_name, const string& load_id) {
+void MorphPlan::add_operator(MorphOperator* op, AddPos add_pos, const string& load_name, const string& load_id,
+                             bool load_folded) {
     if (load_name == "") {
         // generate uniq name
         string name;
@@ -80,6 +86,7 @@ void MorphPlan::add_operator(MorphOperator* op, AddPos add_pos, const string& lo
     } else {
         op->set_id(load_id);
     }
+    op->set_folded(load_folded);
 
     if (add_pos == ADD_POS_AUTO) {
         size_t pos = 0;
@@ -98,12 +105,19 @@ void MorphPlan::add_operator(MorphOperator* op, AddPos add_pos, const string& lo
     emit_plan_changed();
 }
 
+void MorphPlan::reloadWavSet() {
+    if (m_wav_set_repo) {
+        m_wav_set_repo->reload();
+    }
+    emit_plan_changed();
+}
+
 /**
  * Get MorphPlan operators.
  *
  * \returns a read-only reference to the vector containing the operators.
  */
-const vector<MorphOperator*>& MorphPlan::operators() {
+const vector<MorphOperator*>& MorphPlan::operators() const {
     return m_operators;
 }
 
@@ -174,6 +188,6 @@ Project* MorphPlan::project() {
     return m_project;
 }
 
-std::string MorphPlan::id() {
+std::string MorphPlan::id() const {
     return m_id;
 }

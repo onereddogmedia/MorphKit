@@ -26,12 +26,12 @@ class SimpleWavSetSource : public LiveDecoderSource {
     }
     ~SimpleWavSetSource() override;
 
-    void set_wav_set(WavSetRepo* wave_set_repo, const std::string& path);
-    void prepareToPlay(float mix_freq) override;
+    void set_wav_set(WavSet* wav_set);
 
+    void prepareToPlay(float mix_freq) override;
     void retrigger(int channel, float freq, int midi_velocity, bool onset) override;
     Audio* audio() override;
-    AudioBlock* audio_block(size_t index) override;
+    bool rt_audio_block(size_t index, RTAudioBlock& out_block) override;
 };
 
 class MorphSourceModule : public MorphOperatorModule {

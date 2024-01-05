@@ -4,6 +4,7 @@
 #define SPECTMORPH_MIDI_SYNTH_HH
 
 #include "SMMorphPlanSynth.h"
+#include "SMRTMemory.h"
 
 namespace SpectMorph {
 
@@ -35,7 +36,7 @@ class MidiSynth {
   public:
     MidiSynth(size_t n_voices);
 
-    MorphPlanSynth::UpdateP prepare_update(MorphPlanPtr plan);
+    MorphPlanSynth::UpdateP prepare_update(MorphPlan& plan);
     void apply_update(MorphPlanSynth::UpdateP update);
 
     void set_mix_freq(double mix_freq);

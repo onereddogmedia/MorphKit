@@ -51,6 +51,7 @@ class IFFTSynth {
 
     inline void render_partial(double freq, double mag, double phase);
     void get_samples(float* samples, OutputMode output_mode = REPLACE);
+    void precompute_tables();
 
     double quantized_freq(double freq);
 };

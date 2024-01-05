@@ -63,7 +63,7 @@ bool StdioSubIn::skip(size_t size) {
     return false;
 }
 
-unsigned char* StdioSubIn::mmap_mem(size_t&) {
+const unsigned char* StdioSubIn::mmap_mem(size_t&) {
     return nullptr;
 }
 

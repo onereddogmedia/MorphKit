@@ -3,6 +3,8 @@
 #include "SMPolyPhaseInter.h"
 #include "SMMath.h"
 
+#include <array>
+
 #include <math.h>
 
 using namespace SpectMorph;
@@ -15,7 +17,63 @@ using std::vector;
 /* set this to at least WIDTH + 2, no problem if it is a little too high */
 #define MIN_PADDING 16
 
-#include "SMPolyPhaseCoeffs.h"
+#include "SMPolyPhaseCoeffs.cpp"
+
+PolyPhaseInter* PolyPhaseInter::the() {
+    static PolyPhaseInter* instance = nullptr;
+
+    if (!instance)
+        instance = new PolyPhaseInter();
+
+    return instance;
+}
+
+double PolyPhaseInter::get_sample(const vector<float>& signal, double pos) {
+    const int ipos = (const int)pos;
+
+    if (ipos < MIN_PADDING || ipos + MIN_PADDING > int(signal.size())) {
+        std::array<float, MIN_PADDING * 2> shift_signal;
+
+        // shift signal: ipos should be in the center of the generated input signal
+        const int shift = (const int)((int)shift_signal.size() / 2 - ipos);
+
+        for (int i = 0; i < int(shift_signal.size()); i++) {
+            const int s = i - shift;
+
+            if (s >= 0 && s < (int)signal.size())
+                shift_signal[(size_t)i] = signal[(size_t)s];
+            else
+                shift_signal[(size_t)i] = 0;
+        }
+
+        return get_sample_no_check(shift_signal.data(), pos + shift);
+    } else {
+        return get_sample_no_check(signal.data(), pos);
+    }
+}
+
+double PolyPhaseInter::get_sample_no_check(const float* signal, double pos) {
+    const int ipos = (const int)pos;
+
+    const int frac64 = (int)((pos - ipos) * OVERSAMPLE);
+    const float frac = (float)((pos - ipos) * OVERSAMPLE - frac64);
+
+    const float* x_a = &x[(size_t)((WIDTH * 2) * (OVERSAMPLE - frac64))];
+    const float* x_b = &x[(size_t)(WIDTH * 2) * ((OVERSAMPLE * 2 - frac64 - 1) & (OVERSAMPLE - 1))];
+    const float* s_ptr = &signal[(size_t)(ipos - WIDTH + 1)];
+
+    float result_a = 0, result_b = 0;
+    for (int j = 0; j < 2 * WIDTH; j++) {
+        result_a += s_ptr[j] * x_a[j];
+        result_b += s_ptr[j] * x_b[j];
+    }
+    return result_a * (1 - frac) + result_b * frac;
+}
+
+size_t PolyPhaseInter::get_min_padding() {
+    /* Minimum padding before and after the pos sample should be at least MIN_PADDING to use get_sample_no_check() */
+    return MIN_PADDING;
+}
 
 static double c_get(int p) {
     if (p >= 0 && p < WIDTH * OVERSAMPLE * 2 - 1)
@@ -36,49 +94,4 @@ PolyPhaseInter::PolyPhaseInter() {
             p += OVERSAMPLE;
         }
     }
-}
-
-double PolyPhaseInter::get_sample(const Buffer& signal, double pos) {
-    const int ipos = (int)pos;
-
-    if (ipos < MIN_PADDING || ipos + MIN_PADDING > int(signal.size())) {
-        Buffer shift_signal(MIN_PADDING * 2);
-
-        // shift signal: ipos should be in the center of the generated input signal
-        const int shift = (int)shift_signal.size() / 2 - ipos;
-
-        for (int i = 0; i < (int)shift_signal.size(); i++) {
-            const int s = i - shift;
-
-            if (s >= 0 && s < (int)signal.size())
-                shift_signal[(size_t)i] = signal[(size_t)s];
-        }
-
-        return get_sample_no_check(shift_signal, pos + shift);
-    } else {
-        return get_sample_no_check(signal, pos);
-    }
-}
-
-double PolyPhaseInter::get_sample_no_check(const Buffer& signal, double pos) {
-    const int ipos = (const int)pos;
-
-    const int frac64 = (int)((pos - ipos) * OVERSAMPLE);
-    const float frac = (float)((pos - ipos) * OVERSAMPLE - frac64);
-
-    const float* x_a = &x[(size_t)((WIDTH * 2) * (OVERSAMPLE - frac64))];
-    const float* x_b = &x[(size_t)((WIDTH * 2) * ((OVERSAMPLE * 2 - frac64 - 1) & (OVERSAMPLE - 1)))];
-    const float* s_ptr = &signal[(size_t)(ipos - WIDTH + 1)];
-
-    float result_a = 0, result_b = 0;
-    for (int j = 0; j < 2 * WIDTH; j++) {
-        result_a += s_ptr[j] * x_a[j];
-        result_b += s_ptr[j] * x_b[j];
-    }
-    return result_a * (1 - frac) + result_b * frac;
-}
-
-size_t PolyPhaseInter::get_min_padding() {
-    /* Minimum padding before and after the pos sample should be at least MIN_PADDING to use get_sample_no_check() */
-    return MIN_PADDING;
 }

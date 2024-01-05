@@ -30,7 +30,7 @@ string MorphSource::smset() {
 MorphOperatorConfig* MorphSource::clone_config() {
     Config* cfg = new Config(m_config);
 
-    cfg->path = "/" + m_smset;
+    cfg->wav_set = m_morph_plan->wavSetRepo()->get(m_smset);
 
     return cfg;
 }

@@ -3,6 +3,7 @@
 #ifndef SPECTMORPH_UTIL_HH
 #define SPECTMORPH_UTIL_HH
 
+#include <cstdint>
 #include <string>
 #include <vector>
 
@@ -53,6 +54,8 @@ std::string string_vprintf(const char* format, va_list vargs);
 std::string string_locale_printf(const char* format, ...) SPECTMORPH_PRINTF(1, 2);
 
 void sm_printf(const char* format, ...) SPECTMORPH_PRINTF(1, 2);
+
+static constexpr int AVOID_ARRAY_UB = 1; // add this to variable length array size (must be more than zero elements)
 
 enum InstallDir { INSTALL_DIR_INSTRUMENTS, INSTALL_DIR_ICLOUD };
 
@@ -118,7 +121,8 @@ double get_time();
 std::string to_utf8(const std::u32string& str);
 std::u32string to_utf32(const std::string& utf8);
 
-double sm_atof(const char* str); // always use . as decimal seperator
+double sm_atof(const char* str);     // always use . as decimal seperator
+double sm_atof_any(const char* str); // allow . or locale as decimal separator
 
 } // namespace SpectMorph
 

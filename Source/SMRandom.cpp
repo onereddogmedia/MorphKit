@@ -10,7 +10,6 @@ using SpectMorph::Random;
 
 uint16_t SpectMorph::RandomRange::rng_state_ = 0x21;
 
-
 Random::Random() {
     set_seed(3320);
 }

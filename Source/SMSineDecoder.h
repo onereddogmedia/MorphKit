@@ -46,7 +46,7 @@ class SineDecoder {
     size_t frame_step;
     std::vector<double> synth_fixed_phase, next_synth_fixed_phase;
     Mode mode;
-    IFFTSynth* ifft_synth;
+    SpectMorph::IFFTSynth* ifft_synth;
 
   public:
     SineDecoder(double fundamental_freq, double mix_freq, size_t frame_size, size_t frame_step, Mode mode);

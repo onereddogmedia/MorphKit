@@ -6,31 +6,33 @@
 #include "SMLiveDecoder.h"
 #include "SMLiveDecoderSource.h"
 #include "SMMorphOutput.h"
-#include "SMMorphOutputModule.h"
 
 #include <memory>
 
 namespace SpectMorph {
 
 class EffectDecoderSource;
+class MorphOutputModule;
 class EffectDecoder {
-    LiveDecoderSource* original_source;
+    MorphOutputModule* output_module;
 
-    bool use_skip_source;
+    LiveDecoder chain_decoder;
 
-    std::unique_ptr<EffectDecoderSource> skip_source;
-    std::unique_ptr<LiveDecoder> chain_decoder;
+    float current_freq = 440;
 
   public:
-    EffectDecoder(LiveDecoderSource* source);
+    EffectDecoder(MorphOutputModule* output_module = nullptr, float mix_freq = 0);
     ~EffectDecoder();
 
-    void set_config(const MorphOutput::Config* cfg);
-    void prepareToPlay(float mix_freq);
+    void set_config(const MorphOutput::Config* cfg, LiveDecoderSource* source, float mix_freq);
 
+    void prepareToPlay(float mix_freq);
     void retrigger(int channel, float freq, int midi_velocity, bool onset);
-    void process(size_t n_values, const float* freq_in, float* audio_out);
+    void process(RTMemoryArea& rt_memory_area, size_t n_values, const float* freq_in, float* audio_out);
     void release();
+    bool done();
+
+    double time_offset_ms() const;
 };
 
 } // namespace SpectMorph

@@ -23,20 +23,12 @@ namespace SpectMorph {
  */
 class AudioBlock {
   public:
-    constexpr static int block_size = 1024;
-
-    typedef std::vector<uint16_t> Block;
-    Block noise;  //!< noise envelope, representing the original signal minus sine components
-    Block freqs;  //!< frequencies of the sine components of this frame
-    Block mags;   //!< magnitudes of the sine components
-    Block phases; //!< phases of the sine components
-
-    AudioBlock() {
-        noise.reserve(block_size);
-        freqs.reserve(block_size);
-        mags.reserve(block_size);
-        phases.reserve(block_size);
-    }
+    std::vector<uint16_t> noise;      //!< noise envelope, representing the original signal minus sine components
+    std::vector<uint16_t> freqs;      //!< frequencies of the sine components of this frame
+    std::vector<uint16_t> mags;       //!< magnitudes of the sine components
+    std::vector<uint16_t> phases;     //!< phases of the sine components
+    std::vector<float> original_fft;  //!< original zeropadded FFT data - for debugging only
+    std::vector<float> debug_samples; //!< original audio samples for this frame - for debugging only
 
     void sort_freqs();
     double estimate_fundamental(int n_partials = 1, double* mag = nullptr) const;
@@ -80,6 +72,8 @@ class Audio {
         LOOP_TIME_FORWARD,
         LOOP_TIME_PING_PONG,
     };
+
+    static constexpr size_t N_NOISE_BANDS = 32;
 
     float fundamental_freq = 0;          //!< fundamental frequency (note which was encoded), or 0 if not available
     float mix_freq = 0;                  //!< mix freq (sampling rate) of the original audio data

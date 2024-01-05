@@ -20,12 +20,8 @@ GenericIn* MMapIn::open(const std::string&) {
     return nullptr;
 }
 
-GenericIn* MMapIn::open_mem(unsigned char* begin, unsigned char* end) {
-    return new MMapIn(begin, end);
-}
-
-MMapIn::MMapIn(unsigned char* mapfile_, unsigned char* mapend_) : mapfile(mapfile_), mapend(mapend_) {
-    pos = static_cast<unsigned char*>(mapfile);
+MMapIn::MMapIn(const unsigned char* mapfile_, const unsigned char* mapend_) : mapfile(mapfile_), mapend(mapend_) {
+    pos = static_cast<const unsigned char*>(mapfile);
 
     leak_debugger.add(this);
 }
@@ -59,7 +55,7 @@ bool MMapIn::skip(size_t size) {
     }
 }
 
-unsigned char* MMapIn::mmap_mem(size_t& remaining) {
+const unsigned char* MMapIn::mmap_mem(size_t& remaining) {
     remaining = (size_t)(mapend - pos);
     return pos;
 }

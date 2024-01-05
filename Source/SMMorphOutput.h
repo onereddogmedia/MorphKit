@@ -4,7 +4,9 @@
 #define SPECTMORPH_MORPH_OUTPUT_HH
 
 #include "SMMath.h"
+#include "SMModulationList.h"
 #include "SMMorphOperator.h"
+#include "SMProperty.h"
 #include "SMUtils.h"
 
 #include <string>

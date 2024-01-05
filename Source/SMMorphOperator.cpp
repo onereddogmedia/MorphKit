@@ -1,7 +1,9 @@
 // Licensed GNU LGPL v2.1 or later: http://www.gnu.org/licenses/lgpl-2.1.html
 
 #include "SMMorphOperator.h"
+#include "SMModulationList.h"
 #include "SMMorphPlan.h"
+#include "SMProperty.h"
 #include "glib.h"
 
 using namespace SpectMorph;
@@ -11,6 +13,7 @@ using std::string;
 using std::vector;
 
 MorphOperator::MorphOperator(MorphPlan* morph_plan) : m_morph_plan(morph_plan) {
+    m_folded = false;
 }
 
 MorphOperator::~MorphOperator() {
@@ -41,6 +44,16 @@ void MorphOperator::set_id(const string& id) {
     m_id = id;
 }
 
+bool MorphOperator::folded() const {
+    return m_folded;
+}
+
+void MorphOperator::set_folded(bool folded) {
+    m_folded = folded;
+
+    m_morph_plan->emit_plan_changed();
+}
+
 bool MorphOperator::can_rename(const string& name) {
     const vector<MorphOperator*>& ops = m_morph_plan->operators();
 
@@ -63,8 +76,83 @@ vector<MorphOperator*> MorphOperator::dependencies() {
     return {}; /* default implementation -> no dependencies */
 }
 
-MorphOperatorConfig* MorphOperator::clone_config() {
-    return nullptr; // FIXME: remove default impl
+void MorphOperator::get_property_dependencies(vector<MorphOperator*>& deps, const vector<string>& identifiers) {
+    for (auto id : identifiers) {
+        Property* property = m_properties[id].get();
+
+        if (property) {
+            ModulationList* mod_list = property->modulation_list();
+            if (mod_list)
+                mod_list->get_dependencies(deps);
+        } else {
+            fprintf(stderr, "bad identifier %s in MorphOperator::get_property_dependencies\n", id.c_str());
+        }
+    }
+}
+
+Property* MorphOperator::property(const string& identifier) {
+    return m_properties[identifier].get();
+}
+
+void MorphOperator::register_property(Property* property) {
+    std::string identifier = property->identifier();
+
+    assert(!m_properties[identifier]);
+    m_properties[identifier].reset(property);
+    connect(property->signal_value_changed, [this]() { m_morph_plan->emit_plan_changed(); });
+    connect(property->signal_modulation_changed, [this]() { m_morph_plan->emit_plan_changed(); });
+}
+
+LogProperty* MorphOperator::add_property_log(float* value, const string& identifier, const string& label,
+                                             const string& value_label, float def, float mn, float mx) {
+    return new LogProperty(this, value, identifier, label, value_label, def, mn, mx);
+}
+
+LogProperty* MorphOperator::add_property_log(ModulationData* mod_data, const string& identifier, const string& label,
+                                             const string& value_label, float def, float mn, float mx) {
+    LogProperty* property = add_property_log(&mod_data->value, identifier, label, value_label, def, mn, mx);
+    property->set_modulation_data(mod_data);
+    return property;
+}
+
+XParamProperty* MorphOperator::add_property_xparam(float* value, const string& identifier, const string& label,
+                                                   const string& value_label, float def, float mn, float mx,
+                                                   float slope) {
+    return new XParamProperty(this, value, identifier, label, value_label, def, mn, mx, slope);
+}
+
+LinearProperty* MorphOperator::add_property(float* value, const string& identifier, const string& label,
+                                            const string& value_label, float def, float mn, float mx) {
+    return new LinearProperty(this, value, identifier, label, value_label, def, mn, mx);
+}
+
+LinearProperty* MorphOperator::add_property(ModulationData* mod_data, const string& identifier, const string& label,
+                                            const string& value_label, float def, float mn, float mx) {
+    LinearProperty* property = add_property(&mod_data->value, identifier, label, value_label, def, mn, mx);
+    property->set_modulation_data(mod_data);
+    property->set_modulation_range_ui(mx - mn);
+    return property;
+}
+
+IntProperty* MorphOperator::add_property(int* value, const std::string& identifier, const std::string& label,
+                                         const std::string& value_label, int def, int mn, int mx) {
+    return new IntProperty(this, value, identifier, label, value_label, def, mn, mx);
+}
+
+IntVecProperty* MorphOperator::add_property(int* value, const std::string& identifier, const std::string& label,
+                                            const std::string& value_label, int def, const vector<int>& vec) {
+    return new IntVecProperty(this, value, identifier, label, value_label, def, vec);
+}
+
+BoolProperty* MorphOperator::add_property(bool* value, const std::string& identifier, const std::string& label,
+                                          bool def) {
+    return new BoolProperty(this, value, identifier, label, def);
+}
+
+EnumProperty* MorphOperator::add_property_enum(const std::string& identifier, const std::string& label, int def,
+                                               const EnumInfo& ei, std::function<int()> read_func,
+                                               std::function<void(int)> write_func) {
+    return new EnumProperty(this, identifier, label, def, ei, read_func, write_func);
 }
 
 MorphOperatorConfig::~MorphOperatorConfig() {

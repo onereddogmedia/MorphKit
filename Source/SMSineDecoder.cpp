@@ -18,10 +18,10 @@ using std::vector;
 /**
  * \brief Constructor setting up the various decoding parameters
  *
- * @param mix_freq_      sample rate to be used for reconstruction
+ * @param mix_freq_    sample rate to be used for reconstruction
  * @param frame_size_  frame size (in samples)
  * @param frame_step_  frame step (in samples)
- * @param mode_               selects decoding algorithm to be used
+ * @param mode_        selects decoding algorithm to be used
  */
 SineDecoder::SineDecoder(double fundamental_freq_, double mix_freq_, size_t frame_size_, size_t frame_step_, Mode mode_)
     : mix_freq(mix_freq_), fundamental_freq(fundamental_freq_), frame_size(frame_size_), frame_step(frame_step_),
@@ -41,9 +41,9 @@ SineDecoder::~SineDecoder() {
  *
  * This needs two adjecant frames as arguments.
  *
- * @param block              the current frame (the frame to be decoded)
+ * @param block        the current frame (the frame to be decoded)
  * @param next_block   the frame after the current frame
- * @param window            the reconstruction window used for MODE_PHASE_SYNC_OVERLAP
+ * @param window       the reconstruction window used for MODE_PHASE_SYNC_OVERLAP
  */
 void SineDecoder::process(const AudioBlock& block, const AudioBlock& next_block, const vector<double>& window,
                           vector<float>& decoded_sines) {

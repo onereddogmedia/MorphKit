@@ -1,6 +1,7 @@
 // Licensed GNU LGPL v2.1 or later: http://www.gnu.org/licenses/lgpl-2.1.html
 
 #include "SMMidiSynth.h"
+#include "SMMorphOutputModule.h"
 
 #include <assert.h>
 
@@ -15,7 +16,7 @@ MidiSynth::MidiSynth(size_t n_voices) : morph_plan_synth(n_voices) {
     }
 }
 
-MorphPlanSynth::UpdateP MidiSynth::prepare_update(MorphPlanPtr plan) {
+MorphPlanSynth::UpdateP MidiSynth::prepare_update(MorphPlan& plan) {
     return morph_plan_synth.prepare_update(plan);
 }
 

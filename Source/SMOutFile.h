@@ -41,7 +41,7 @@ class OutFile {
     void write_string(const std::string& s, const std::string& data);
     void write_float(const std::string& s, double f);
     void write_float_block(const std::string& s, const std::vector<float>& fb);
-    void write_uint16_block(const std::string& s, const AudioBlock::Block& ib);
+    void write_uint16_block(const std::string& s, const std::vector<uint16_t>& ib);
     void write_blob(const std::string& s, const void* data, size_t size);
     void write_operator(const std::string& name, const MorphOperatorPtr& op);
 };

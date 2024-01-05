@@ -166,13 +166,16 @@ inline void fast_vector_sincos(const VectorSinParams& params, Iterator sin_begin
 /* see: http://ds9a.nl/gcc-simd/ */
 union F4Vector {
     float f[4];
+#if defined(__SSE__) || defined(SM_ARM_SSE)
     __m128 v; // vector of four single floats
+#endif
 };
 /// @endcond
 
 template <bool NEED_COS, int MODE>
 inline void internal_fast_vector_sincosf(const VectorSinParams& params, float* sin_begin, float* sin_end,
                                          float* cos_begin) {
+#if defined(__SSE__) || defined(SM_ARM_SSE)
     g_return_if_fail(params.mix_freq > 0 && params.freq > 0 && params.phase > -99 && params.mag > 0);
 
     const int TABLE_SIZE = 32;
@@ -258,6 +261,12 @@ inline void internal_fast_vector_sincosf(const VectorSinParams& params, float* s
         fast_vector_sincos(rest_params, sin_begin + n, sin_end, cos_begin + n);
     else
         fast_vector_sin(rest_params, sin_begin + n, sin_end);
+#else
+    if (NEED_COS)
+        fast_vector_sincos(params, sin_begin, sin_end, cos_begin);
+    else
+        fast_vector_sin(params, sin_begin, sin_end);
+#endif
 }
 
 inline void fast_vector_sincosf(const VectorSinParams& params, float* sin_begin, float* sin_end, float* cos_begin) {
@@ -391,11 +400,11 @@ void sm_math_init();
 uint16_t sm_freq2ifreq(double freq);
 double sm_ifreq2freq_slow(uint16_t ifreq);
 
-inline float sm_idb2factor(uint16_t idb) {
+inline double sm_idb2factor(uint16_t idb) {
     return MathTables::idb2f_high[idb >> 8] * MathTables::idb2f_low[idb & 0xff];
 }
 
-inline float sm_ifreq2freq(uint16_t ifreq) {
+inline double sm_ifreq2freq(uint16_t ifreq) {
     return MathTables::ifreq2f_high[ifreq >> 8] * MathTables::ifreq2f_low[ifreq & 0xff];
 }
 
@@ -428,10 +437,9 @@ template <typename T> inline const T& sm_clamp(const T& value, const T& min_valu
     return std::min(std::max(value, min_value), max_value);
 }
 
-template <typename Type>
-bool approximatelyEqual(Type a, Type b) noexcept {
-    return std::abs (a - b) <= (std::numeric_limits<Type>::epsilon() * std::max (a, b))
-            || std::abs (a - b) < std::numeric_limits<Type>::min();
+template <typename Type> bool approximatelyEqual(Type a, Type b) noexcept {
+    return std::abs(a - b) <= (std::numeric_limits<Type>::epsilon() * std::max(a, b)) ||
+           std::abs(a - b) < std::numeric_limits<Type>::min();
 }
 
 template <typename Float_Type> inline void RotatePoint45CW(Float_Type& x1, Float_Type& y1) {

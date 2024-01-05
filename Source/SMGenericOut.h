@@ -31,7 +31,7 @@ class GenericOut {
      * \param size number of bytes to be written
      * \returns the number of bytes successfully written (can be 0)
      */
-    virtual size_t write(const void* ptr, size_t size) = 0;
+    virtual int write(const void* ptr, size_t size) = 0;
 };
 
 } // namespace SpectMorph

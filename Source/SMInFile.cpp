@@ -64,13 +64,13 @@ InFile::Event InFile::event() {
 
 bool InFile::read_raw_string(string& str) {
     size_t remaining;
-    unsigned char* mem = file->mmap_mem(remaining);
+    const unsigned char* mem = file->mmap_mem(remaining);
     if (mem) /* fast variant of reading strings for the mmap case */
     {
         for (size_t i = 0; i < remaining; i++) {
             if (mem[i] == 0) {
                 if (file->skip(i + 1)) {
-                    str.assign(reinterpret_cast<char*>(mem), i);
+                    str.assign(reinterpret_cast<const char*>(mem), i);
                     return true;
                 }
             }
@@ -208,7 +208,7 @@ bool InFile::read_raw_float_block(vector<float>& fb) {
 
     fb.resize((size_t)size);
     if (size > 0) {
-        int* buffer = reinterpret_cast<int*>(&fb[0]);
+        int* buffer = reinterpret_cast<int*>(fb.data());
 
         if (file->read(&buffer[0], fb.size() * 4) != size * 4)
             return false;
@@ -223,7 +223,7 @@ bool InFile::read_raw_uint16_block(vector<uint16_t>& ib) {
 
     ib.resize((size_t)size);
     if (size > 0) {
-        if (file->read(&ib[0], ib.size() * 2) != size * 2)
+        if (file->read(ib.data(), ib.size() * 2) != size * 2)
             return false;
     }
     return true;

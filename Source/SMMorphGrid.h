@@ -10,8 +10,9 @@
 namespace SpectMorph {
 
 struct MorphGridNode {
-    std::string smset; // a node has an instrument (smset)
-    std::string path;
+    MorphOperatorPtr op; // a node has either an operator (op) as input,
+    std::string smset;   // or an instrument (smset)
+    WavSet* wav_set = nullptr;
 
     MorphGridNode();
 };
@@ -19,21 +20,16 @@ struct MorphGridNode {
 class MorphGrid : public MorphOperator {
   public:
     struct Config : public MorphOperatorConfig {
-        unsigned int width;
-        unsigned int height;
+        int width;
+        int height;
 
         double x_morphing;
         double y_morphing;
 
-        ControlType x_control_type;
-        ControlType y_control_type;
-        ControlType node_a_db_control_type;
-        ControlType node_b_db_control_type;
-        ControlType node_c_db_control_type;
-        ControlType node_d_db_control_type;
-
         std::vector<std::vector<MorphGridNode>> input_node;
     };
+    static constexpr auto P_X_MORPHING = "x_morphing";
+    static constexpr auto P_Y_MORPHING = "y_morphing";
 
   protected:
     Config m_config;
@@ -52,23 +48,25 @@ class MorphGrid : public MorphOperator {
     OutputType output_type() override;
     MorphOperatorConfig* clone_config() override;
 
-    void set_width(unsigned int width);
-    unsigned int width();
+    std::vector<MorphOperator*> dependencies() override;
 
-    void set_height(unsigned int height);
-    unsigned int height();
+    void set_width(int width);
+    int width();
 
+    void set_height(int height);
+    int height();
+
+    double x_morphing();
     void set_x_morphing(double new_value);
+    double y_morphing();
     void set_y_morphing(double new_value);
-    void set_x_control_type(ControlType new_control_type);
-    void set_y_control_type(ControlType new_control_type);
-    void set_node_a_db_control_type(ControlType new_control_type);
-    void set_node_b_db_control_type(ControlType new_control_type);
-    void set_node_c_db_control_type(ControlType new_control_type);
-    void set_node_d_db_control_type(ControlType new_control_type);
 
-    void set_input_node(unsigned int x, unsigned int y, const MorphGridNode& node);
-    MorphGridNode input_node(unsigned int x, unsigned int y);
+    void set_input_node(int x, int y, const MorphGridNode& node);
+    MorphGridNode input_node(int x, int y);
+    std::string input_node_label(int x, int y);
+
+    /* slots: */
+    void on_operator_removed(MorphOperator* op);
 };
 
 } // namespace SpectMorph

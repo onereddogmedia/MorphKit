@@ -14,12 +14,13 @@ static double mel_to_hz(double mel) {
     return 700 * (exp(mel / 1127.0) - 1);
 }
 
-NoiseBandPartition::NoiseBandPartition(double mix_freq) : band_count((size_t)n_bands), band_start((size_t)n_bands) {
-    int d = 0;
+NoiseBandPartition::NoiseBandPartition(size_t n_bands, size_t n_spectrum_bins, double mix_freq)
+    : band_count(n_bands), band_start(n_bands), spectrum_size(n_spectrum_bins) {
+    size_t d = 0;
     /* assign each d to a band */
-    vector<int> band_from_d((size_t)n_spectrum_bins);
+    vector<int> band_from_d(n_spectrum_bins);
     std::fill(band_from_d.begin(), band_from_d.end(), -1);
-    for (int band = 0; band < n_bands; band++) {
+    for (size_t band = 0; band < n_bands; band++) {
         double mel_low = 30 + 4000.0 / n_bands * band;
         double mel_high = 30 + 4000.0 / n_bands * (band + 1);
         double hz_low = mel_to_hz(mel_low);
@@ -34,9 +35,9 @@ NoiseBandPartition::NoiseBandPartition(double mix_freq) : band_count((size_t)n_b
             }
         }
         while (f_hz < hz_high && d < n_spectrum_bins) {
-            if (d < (int)band_from_d.size()) {
-                band_from_d[(size_t)d] = band;
-                band_from_d[(size_t)(d + 1)] = band;
+            if (d < band_from_d.size()) {
+                band_from_d[(size_t)d] = (int)band;
+                band_from_d[(size_t)(d + 1)] = (int)band;
             }
             d += 2;
             f_hz = mix_freq / 2.0 * d / n_spectrum_bins;
@@ -44,30 +45,38 @@ NoiseBandPartition::NoiseBandPartition(double mix_freq) : band_count((size_t)n_b
     }
     /* count bins per band */
     for (d = 0; d < n_spectrum_bins; d += 2) {
-        int b = band_from_d[(size_t)d];
+        int b = band_from_d[d];
         if (b != -1) {
             assert(b >= 0 && b < int(n_bands));
             if (band_count[(size_t)b] == 0)
-                band_start[(size_t)b] = d;
+                band_start[(size_t)b] = (int)d;
             band_count[(size_t)b]++;
         }
     }
 }
 
-void NoiseBandPartition::noise_envelope_to_spectrum(Random& random_gen, const AudioBlock::Block& envelope,
-                                                    float* spectrum, float scale) {
-    assert(envelope.size() == n_bands);
+size_t NoiseBandPartition::n_bands() {
+    return band_count.size();
+}
 
-    uint32 random_data[(n_spectrum_bins + 7) / 8];
+size_t NoiseBandPartition::n_spectrum_bins() {
+    return spectrum_size;
+}
 
-    random_gen.random_block((size_t)(n_spectrum_bins + 7) / 8, random_data);
+void NoiseBandPartition::noise_envelope_to_spectrum(Random& random_gen, const RTVector<uint16_t>& envelope,
+                                                    float* spectrum, double scale) {
+    assert(envelope.size() == n_bands());
 
-    zero_float_block((size_t)n_spectrum_bins, spectrum);
+    uint32 random_data[(spectrum_size + 7) / 8];
+
+    random_gen.random_block((spectrum_size + 7) / 8, random_data);
+
+    zero_float_block(spectrum_size, spectrum);
 
     const uint8* random_data_byte = reinterpret_cast<uint8*>(&random_data[0]);
 
-    for (size_t b = 0; b < n_bands; b++) {
-        const float value = sm_idb2factor(envelope[b]) * scale;
+    for (size_t b = 0; b < n_bands(); b++) {
+        const float value = (const float)(sm_idb2factor(envelope[b]) * scale);
 
         int start = band_start[b];
         int end = start + band_count[b] * 2;

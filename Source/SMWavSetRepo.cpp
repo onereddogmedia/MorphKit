@@ -14,6 +14,7 @@ WavSetRepo::~WavSetRepo() {
 }
 
 WavSet* WavSetRepo::get(const string& filename) {
+    std::lock_guard<std::mutex> lock(mutex);
     auto wav = (*wav_set_map)(filename);
     return wav.get();
 }

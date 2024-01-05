@@ -7,12 +7,14 @@
 #include <stdio.h>
 
 #include <map>
+#include <mutex>
 
 using namespace SpectMorph;
 
 using std::map;
 using std::vector;
 
+static std::mutex table_mutex;
 static map<size_t, IFFTSynthTable*> table_for_block_size;
 
 namespace SpectMorph {
@@ -21,6 +23,8 @@ vector<float> IFFTSynth::sin_table;
 
 IFFTSynth::IFFTSynth(size_t block_size_, double mix_freq_, WindowType win_type)
     : block_size(block_size_), mix_freq(mix_freq_) {
+    std::lock_guard lg(table_mutex);
+
     zero_padding = 256;
 
     fft_work = nullptr;
@@ -120,4 +124,9 @@ double IFFTSynth::quantized_freq(double mf_freq) {
     const double mf_qfreq = qfreq / block_size * mix_freq;
 
     return mf_qfreq;
+}
+
+void IFFTSynth::precompute_tables() {
+    // trigger fftw planning which can be slow
+    FFT::fftsr_destructive_float(fftsr_destructive_float_plan, block_size, fft_in, fft_out, fft_work);
 }

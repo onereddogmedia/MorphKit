@@ -24,3 +24,21 @@ void Block::zero(uint n_values, float* ovalues) {
     for (uint i = 0; i < n_values; i++)
         ovalues[i] = 0;
 }
+
+void Block::range(uint n_values, const float* ivalues, float& min_value, float& max_value) {
+    float minv, maxv;
+    if (n_values) {
+        minv = maxv = ivalues[0];
+
+        for (uint i = 1; i < n_values; i++) {
+            if (ivalues[i] < minv)
+                minv = ivalues[i];
+            if (ivalues[i] > maxv)
+                maxv = ivalues[i];
+        }
+    } else {
+        minv = maxv = 0;
+    }
+    min_value = minv;
+    max_value = maxv;
+}

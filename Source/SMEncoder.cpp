@@ -25,8 +25,6 @@ using std::max;
 using std::string;
 using std::vector;
 
-#define MIN(a, b) b
-
 static double magnitude(vector<float>::iterator i) {
     return sqrt(*i * *i + *(i + 1) * *(i + 1));
 }
@@ -105,15 +103,16 @@ void EncoderParams::setup_params(const WavData& wav_data, double new_fundamental
     fundamental_freq = new_fundamental_freq;
 
     // --- frame size & step ---
-    double min_frame_periods, min_frame_size;
+    double min_frame_periods, min_frame_size, steps_per_frame;
     if (!get_param("min-frame-periods", min_frame_periods))
         min_frame_periods = 4; // default: at least 4 periods of the fundamental per frame
     if (!get_param("min-frame-size", min_frame_size))
         min_frame_size = 40; // default: at least 40ms frames
+    steps_per_frame = 4;     // default: 4 steps per frame
 
     frame_size_ms = (float)min_frame_size;
     frame_size_ms = max<float>(frame_size_ms, 1000.0f / (float)fundamental_freq * (float)min_frame_periods);
-    frame_step_ms = frame_size_ms / 4.0f;
+    frame_step_ms = (float)(frame_size_ms / steps_per_frame);
 
     // --- convert block sizes in ms to sample counts ----
     frame_size = make_odd((size_t)(mix_freq * 0.001f * frame_size_ms));
@@ -175,9 +174,9 @@ void Encoder::compute_stft(const WavData& multi_channel_wav_data, int channel) {
     /* deinterleave multi channel signal */
     vector<float> single_channel_signal;
 
-    const int n_channels = multi_channel_wav_data.n_channels();
-    for (int i = channel; i < (int)multi_channel_wav_data.n_values(); i += n_channels)
-        single_channel_signal.push_back(multi_channel_wav_data[(size_t)i]);
+    const size_t n_channels = (size_t)multi_channel_wav_data.n_channels();
+    for (size_t i = (size_t)channel; i < multi_channel_wav_data.n_values(); i += n_channels)
+        single_channel_signal.push_back(multi_channel_wav_data[i]);
 
     original_samples = single_channel_signal;
 
@@ -192,7 +191,7 @@ void Encoder::compute_stft(const WavData& multi_channel_wav_data, int channel) {
     const uint64 n_values = wav_data.n_values();
     const size_t frame_size = enc_params.frame_size;
     const size_t block_size = enc_params.block_size;
-    const size_t zeropad = enc_params.zeropad;
+    const size_t zeropad = (size_t)enc_params.zeropad;
     const auto& window = enc_params.window;
 
     sample_count = n_values;
@@ -220,7 +219,7 @@ void Encoder::compute_stft(const WavData& multi_channel_wav_data, int channel) {
 
         size_t j = in.size() - enc_params.frame_size / 2;
         for (vector<float>::const_iterator i = block.begin(); i != block.end(); i++)
-            in[((j++) % in.size())] = *i;
+            in[(j++) % in.size()] = *i;
 
         std::copy(in.begin(), in.end(), fft_in);
         fft_work = FFT::fftar_float(fftar_float_plan, in.size(), fft_in, fft_out, fft_work, fft_workN);
@@ -239,8 +238,6 @@ void Encoder::compute_stft(const WavData& multi_channel_wav_data, int channel) {
     }
     FFT::free_array_float(fft_in);
     FFT::free_array_float(fft_out);
-    FFT::free_array_float(fft_work);
-    FFT::cleanup(fftar_float_plan);
 }
 
 namespace {
@@ -270,7 +267,7 @@ class QInterpolator {
 void Encoder::search_local_maxima() {
     const size_t block_size = enc_params.block_size;
     const size_t frame_size = enc_params.frame_size;
-    const size_t zeropad = enc_params.zeropad;
+    const size_t zeropad = (size_t)enc_params.zeropad;
     const double mix_freq = enc_params.mix_freq;
     const auto& window = enc_params.window;
 
@@ -834,7 +831,7 @@ void Encoder::approx_noise() {
     const double norm = 0.5 * enc_params.mix_freq * sum_w2;
 
     for (uint64 frame = 0; frame < audio_blocks.size(); frame++) {
-        vector<double> noise_envelope(32);
+        vector<double> noise_envelope(Audio::N_NOISE_BANDS);
         vector<double> spectrum(audio_blocks[frame].noise.begin(), audio_blocks[frame].noise.end());
 
         /* A complex FFT would preserve the energy of the input signal exactly; the difference to
@@ -850,6 +847,7 @@ void Encoder::approx_noise() {
         spectrum[spectrum.size() - 2] /= sqrt(2);
 
         approximate_noise_spectrum(enc_params.mix_freq, spectrum, noise_envelope, norm);
+
         audio_blocks[frame].noise.assign(noise_envelope.begin(), noise_envelope.end());
 
         if (killed("_noise", frame & 7))
@@ -900,6 +898,7 @@ void Encoder::sort_freqs() {
 /**
  * This function calls all steps necessary for encoding in the right order.
  *
+ * \param dhandle a data handle containing the signal to be encoded
  * \param optimization_level determines if fast (0), medium (1), or very slow (2) algorithm is used
  */
 bool Encoder::encode(const WavData& wav_data, int channel, int optimization_level, bool track_sines) {
@@ -986,7 +985,7 @@ static void convert_freqs_mags_phases(const EncoderBlock& eblock, AudioBlock& ab
     }
 }
 
-static void convert_noise(const vector<float>& noise, AudioBlock::Block& inoise) {
+static void convert_noise(const vector<float>& noise, vector<uint16_t>& inoise) {
     inoise.resize(noise.size());
 
     for (size_t i = 0; i < noise.size(); i++)

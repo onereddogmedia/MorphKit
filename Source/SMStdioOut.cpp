@@ -33,8 +33,8 @@ int StdioOut::put_byte(int c) {
     return fputc(c, file);
 }
 
-size_t StdioOut::write(const void* ptr, size_t size) {
+int StdioOut::write(const void* ptr, size_t size) {
     if (size == 0)
         return 0;
-    return fwrite(ptr, 1, size, file);
+    return (int)fwrite(ptr, 1, size, file);
 }

@@ -17,7 +17,7 @@ class MemOut : public GenericOut {
     ~MemOut() override;
 
     int put_byte(int c) override;
-    size_t write(const void* ptr, size_t size) override;
+    int write(const void* ptr, size_t size) override;
 };
 
 } // namespace SpectMorph

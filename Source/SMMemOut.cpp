@@ -23,8 +23,8 @@ int MemOut::put_byte(int c) {
     return c;
 }
 
-size_t MemOut::write(const void* ptr, size_t size) {
+int MemOut::write(const void* ptr, size_t size) {
     const unsigned char* uptr = reinterpret_cast<const unsigned char*>(ptr);
     output->insert(output->end(), uptr, uptr + size);
-    return size;
+    return (int)size;
 }

@@ -63,8 +63,10 @@ void sm_math_init() {
         MathTables::ifreq2f_low[i] = (float)sm_ifreq2freq_slow((uint16_t)(ADD + i));
     }
 
+#if defined(__i386__) && defined(__GNUC__)
     // ensure proper rounding mode
     assert(sm_fpu_okround());
+#endif
 
     assert(sm_round_positive(42.51) == 43);
     assert(sm_round_positive(3.14) == 3);
@@ -74,7 +76,7 @@ void sm_math_init() {
 }
 
 int sm_fpu_okround() {
-#if defined(__i386__)
+#if defined(__i386__) && defined(__GNUC__)
     typedef unsigned short int BseFpuState;
 
     BseFpuState cv;

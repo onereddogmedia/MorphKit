@@ -14,6 +14,7 @@ class Block {
     static void mul(uint n_values, float* ovalues, const float* ivalues);
     static void add(uint n_values, float* ovalues, const float* ivalues);
     static void zero(uint n_values, float* ovalues);
+    static void range(uint n_values, const float* ivalues, float& min_value, float& max_value);
 };
 
 } // namespace SpectMorph

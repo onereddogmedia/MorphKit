@@ -5,30 +5,33 @@
 
 #include <vector>
 
-#include "SMAudio.h"
-#include "SMRandom.h"
 #include "glib.h"
 #include <stdint.h>
+
+#include "SMAudio.h"
+#include "SMRTMemory.h"
+#include "SMRandom.h"
 
 namespace SpectMorph {
 
 class NoiseBandPartition {
     std::vector<int> band_count;
     std::vector<int> band_start;
+    size_t spectrum_size;
 
   public:
-    NoiseBandPartition(double mix_freq);
-    void noise_envelope_to_spectrum(SpectMorph::Random& random_gen, const AudioBlock::Block& envelope, float* spectrum,
-                                    float scale);
+    NoiseBandPartition(size_t n_bands, size_t n_spectrum_bins, double mix_freq);
+    void noise_envelope_to_spectrum(SpectMorph::Random& random_gen, const RTVector<uint16_t>& envelope, float* spectrum,
+                                    double scale);
+
+    size_t n_bands();
+    size_t n_spectrum_bins();
 
     int bins_per_band(size_t band) {
         g_return_val_if_fail(band < band_count.size(), 0);
 
         return band_count[band];
     }
-
-    constexpr static int n_bands = 32;
-    constexpr static int n_spectrum_bins = 4096;
 };
 
 } // namespace SpectMorph

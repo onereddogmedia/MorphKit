@@ -11,7 +11,7 @@ using namespace SpectMorph;
 
 static LeakDebugger leak_debugger("SpectMorph::MorphKit");
 
-MorphKit::MorphKit(const std::string& path, const std::string& icloud) {
+MorphKit::MorphKit(const std::string& path, const std::string& icloud) : m_time_info_gen(48000) {
     SpectMorph::sm_set_pkg_data_dir(path);
     SpectMorph::sm_set_icloud_data_dir(icloud);
     int_sincos_init();
@@ -33,8 +33,8 @@ void MorphKit::setModel(const uint model, const std::string& name) {
     for (auto op : project->morph_plan()->operators()) {
         std::string type = op->type();
         if (type == "SpectMorph::MorphGrid") {
-            unsigned int x = 0;
-            unsigned int y = 0;
+            int x = 0;
+            int y = 0;
             if (model == 1) { // A
                 x = 0;
                 y = 1;
@@ -74,8 +74,8 @@ void MorphKit::setLinear(const float value) {
                 width = 1;
                 height = 1;
             }
-            morph_grid->set_width((unsigned int)width);
-            morph_grid->set_height((unsigned int)height);
+            morph_grid->set_width(width);
+            morph_grid->set_height(height);
 
             SpectMorph::MorphGridNode node = morph_grid->input_node(0, 1);
             morph_grid->set_input_node(0, 1, node);
@@ -89,9 +89,8 @@ void MorphKit::setLinear(const float value) {
     }
 }
 
-void MorphKit::wavSetReload() {
-    project->midi_synth()->plan_synth()->reload();
-    project->morph_plan()->signal_plan_changed();
+void MorphKit::reloadWavSet() {
+    project->morph_plan()->reloadWavSet();
     project->try_update_synth();
 }
 
@@ -99,21 +98,13 @@ void MorphKit::makeMorphPlan() {
     project->set_state_changed_notify(false);
     auto plan = project->morph_plan();
 
-    plan->clear();
-    auto grid =
-        dynamic_cast<SpectMorph::MorphGrid*>(SpectMorph::MorphOperator::create("SpectMorph::MorphGrid", plan.c_ptr()));
+    auto grid = dynamic_cast<SpectMorph::MorphGrid*>(SpectMorph::MorphOperator::create("SpectMorph::MorphGrid", plan));
     grid->set_id(plan->generate_id());
     grid->set_name("Grid #1");
     grid->set_width(2);
     grid->set_height(2);
     grid->set_x_morphing(0);
     grid->set_y_morphing(0);
-    grid->set_x_control_type(SpectMorph::MorphGrid::ControlType::CONTROL_SIGNAL_1);
-    grid->set_y_control_type(SpectMorph::MorphGrid::ControlType::CONTROL_SIGNAL_2);
-    grid->set_node_a_db_control_type(SpectMorph::MorphGrid::ControlType::CONTROL_SIGNAL_3);
-    grid->set_node_b_db_control_type(SpectMorph::MorphGrid::ControlType::CONTROL_SIGNAL_4);
-    grid->set_node_c_db_control_type(SpectMorph::MorphGrid::ControlType::CONTROL_SIGNAL_5);
-    grid->set_node_d_db_control_type(SpectMorph::MorphGrid::ControlType::CONTROL_SIGNAL_6);
 
     SpectMorph::MorphGridNode node1;
     node1.smset = "/Synth/Sine.smset";
@@ -137,8 +128,8 @@ void MorphKit::makeMorphPlan() {
 
     plan->add_operator(grid, SpectMorph::MorphPlan::ADD_POS_END);
 
-    auto out = dynamic_cast<SpectMorph::MorphOutput*>(
-        SpectMorph::MorphOperator::create("SpectMorph::MorphOutput", plan.c_ptr()));
+    auto out =
+        dynamic_cast<SpectMorph::MorphOutput*>(SpectMorph::MorphOperator::create("SpectMorph::MorphOutput", plan));
     out->set_channel_op(0, grid);
     plan->add_operator(out, SpectMorph::MorphPlan::ADD_POS_END);
 
@@ -147,10 +138,13 @@ void MorphKit::makeMorphPlan() {
 }
 
 void MorphKitVoice::startNote(const float note_frequency, const int8_t midi_velocity, bool onset) {
+    TimeInfo time_info = m_time_info_gen->time_info(0);
     if (mp_voice) {
         SpectMorph::MorphOutputModule* output_module = mp_voice->output();
         if (output_module) {
-            output_module->retrigger(0, note_frequency, midi_velocity, onset);
+            output_module->retrigger(time_info, 0, note_frequency, midi_velocity, onset);
+            mp_voice->set_control_input(0, 0);
+            mp_voice->set_control_input(1, 0);
         }
     }
 }
@@ -185,7 +179,7 @@ void MorphKitVoice::render(const double frequency, sampleType* out, const size_t
             for (size_t sample = 0; sample < numSamples; ++sample) {
                 frequencies[sample] = (float)frequency;
             }
-            output_module->process(numSamples, values, 1, frequencies);
+            output_module->process(*m_time_info_gen, *rt_memory_area, numSamples, values, frequencies);
             for (size_t sample = 0; sample < numSamples; ++sample) {
                 out[sample] += morph[sample];
             }
@@ -258,11 +252,7 @@ void MorphKitEncoder::encodeToFile(std::vector<float>& samples, int channels, fl
         audio_blocks[i].debug_samples.clear();
     }
 
-    if (loop_type == SpectMorph::Audio::LOOP_NONE && loop_start == -1 && loop_end == -1) {
-        // no loop
-    } else {
-        encoder.set_loop(loop_type, loop_start, loop_end);
-    }
+    encoder.set_loop(loop_type, loop_start, loop_end);
 
     Audio* audio = encoder.save_as_audio();
     const int last_frame = audio->contents.size() ? ((const int)audio->contents.size() - 1) : 0;

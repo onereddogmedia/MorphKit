@@ -3,26 +3,32 @@
 #ifndef SPECTMORPH_MORPH_OUTPUT_MODULE_HH
 #define SPECTMORPH_MORPH_OUTPUT_MODULE_HH
 
+#include "SMEffectDecoder.h"
 #include "SMMorphOperatorModule.h"
-#include "SMMorphOutput.h"
 #include "SMMorphPlanVoice.h"
+#include "SMRTMemory.h"
 
 namespace SpectMorph {
 
 class MorphOutputModule : public MorphOperatorModule {
-    const struct MorphOutput::Config* cfg;
-    std::vector<MorphOperatorModule*> out_ops;
-    std::vector<class EffectDecoder*> out_decoders;
+    const MorphOutput::Config* cfg = nullptr;
+    const TimeInfoGenerator* time_info_gen = nullptr;
+    RTMemoryArea* m_rt_memory_area = nullptr;
+    EffectDecoder decoder;
 
   public:
     MorphOutputModule(MorphPlanVoice* voice);
     ~MorphOutputModule();
 
     void set_config(const MorphOperatorConfig* op_cfg);
-    void process(size_t n_samples, float** values, size_t n_ports, const float* freq_in = nullptr);
+    void process(const TimeInfoGenerator& time_info, RTMemoryArea& rt_memory_area, size_t n_samples, float** values,
+                 const float* freq_in = nullptr);
     void prepareToPlay(float mix_freq);
-    void retrigger(int channel, float freq, int midi_velocity, bool onset);
+    void retrigger(const TimeInfo& time_info, int channel, float freq, int midi_velocity, bool onset);
     void release();
+    bool done();
+    TimeInfo compute_time_info() const;
+    RTMemoryArea* rt_memory_area() const;
 };
 
 } // namespace SpectMorph

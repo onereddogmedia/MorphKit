@@ -3,26 +3,25 @@
 #ifndef SPECTMORPH_POLY_PHASE_INTER_HH
 #define SPECTMORPH_POLY_PHASE_INTER_HH
 
-#include "fixed_capacity_vector.h"
 #include <sys/types.h>
 #include <vector>
 
 namespace SpectMorph {
 
 class PolyPhaseInter {
-  public:
     PolyPhaseInter();
-    ~PolyPhaseInter() = default;
+    ~PolyPhaseInter() {
+    }
 
-    typedef std::experimental::fixed_capacity_vector<float, 32768> Buffer;
+    std::vector<float> x;
 
-    double get_sample(const Buffer& signal, double pos);
-    double get_sample_no_check(const Buffer& signal, double pos);
+  public:
+    static PolyPhaseInter* the();
+
+    double get_sample(const std::vector<float>& signal, double pos);
+    double get_sample_no_check(const float* signal, double pos);
 
     size_t get_min_padding();
-
-  private:
-    std::vector<float> x;
 };
 
 } // namespace SpectMorph

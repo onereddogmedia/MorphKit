@@ -1,9 +1,8 @@
 // Licensed GNU LGPL v2.1 or later: http://www.gnu.org/licenses/lgpl-2.1.html
 
 #include "SMMorphPlanVoice.h"
-#include "SMEffectDecoder.h"
 #include "SMLeakDebugger.h"
-#include "SMMorphOutput.h"
+#include "SMMidiSynth.h"
 #include "SMMorphOutputModule.h"
 #include <assert.h>
 #include <map>
@@ -17,9 +16,9 @@ using std::vector;
 
 static LeakDebugger leak_debugger("SpectMorph::MorphPlanVoice");
 
-MorphPlanVoice::MorphPlanVoice(MorphPlanSynth* synth)
-    : m_control_input(MorphPlan::N_CONTROL_INPUTS), m_control_output(MorphPlan::N_CONTROL_INPUTS), m_output(nullptr),
-      m_mix_freq(44100), m_morph_plan_synth(synth) {
+MorphPlanVoice::MorphPlanVoice(float mix_freq, MorphPlanSynth* synth)
+    : m_control_input(MorphPlan::N_CONTROL_INPUTS), m_control_output(MorphPlan::N_CONTROL_INPUTS), m_mix_freq(mix_freq),
+      m_morph_plan_synth(synth) {
     leak_debugger.add(this);
 }
 
@@ -28,42 +27,7 @@ void MorphPlanVoice::configure_modules() {
         modules[i].module->set_config(modules[i].config);
 }
 
-void MorphPlanVoice::create_modules(MorphPlanSynth::UpdateP update) {
-    for (auto& op : update->ops) {
-        MorphOperatorModule* module = MorphOperatorModule::create(op.type, this);
-
-        if (!module) {
-            g_warning("operator type %s lacks MorphOperatorModule\n", op.type.c_str());
-        } else {
-            module->set_ptr_id(op.ptr_id);
-
-            OpModule op_module;
-
-            op_module.module = module;
-            op_module.ptr_id = op.ptr_id;
-            op_module.config = op.config;
-
-            modules.push_back(op_module);
-
-            if (op.type == "SpectMorph::MorphOutput")
-                m_output = dynamic_cast<MorphOutputModule*>(module);
-        }
-    }
-}
-
-void MorphPlanVoice::clear_modules() {
-    for (size_t i = 0; i < modules.size(); i++) {
-        assert(modules[i].module != nullptr);
-        delete modules[i].module;
-        modules[i].module = nullptr;
-    }
-    modules.clear();
-
-    m_output = nullptr;
-}
-
 MorphPlanVoice::~MorphPlanVoice() {
-    clear_modules();
     leak_debugger.del(this);
 }
 
@@ -76,25 +40,31 @@ MorphOperatorModule* MorphPlanVoice::module(const MorphOperatorPtr& ptr) {
 
     for (size_t i = 0; i < modules.size(); i++)
         if (modules[i].ptr_id == ptr_id)
-            return modules[i].module;
+            return modules[i].module.get();
 
     return nullptr;
 }
 
-void MorphPlanVoice::full_update(MorphPlanSynth::UpdateP update) {
+void MorphPlanVoice::full_update(MorphPlanSynth::FullUpdateVoice& full_update_voice) {
     /* This will loose the original state information which means the audio
      * will not transition smoothely. However, this should only occur for plan
      * changes, not parameter updates.
      */
-    clear_modules();
-    create_modules(update);
+
+    // exchange old modules with new modules
+    //  - avoids allocating any memory here (in audio thread)
+    //  - avoids freeing any memory here (in audio thread), this is done later when the update structure is freed
+    modules.swap(full_update_voice.new_modules);
+    m_output = full_update_voice.output_module;
+
+    // reconfigure modules
     configure_modules();
 }
 
 void MorphPlanVoice::cheap_update(MorphPlanSynth::UpdateP update) {
     g_return_if_fail(update->ops.size() == modules.size());
 
-    // exchange old operators with new operators
+    // set new configs from update
     for (size_t i = 0; i < modules.size(); i++) {
         assert(modules[i].ptr_id == update->ops[i].ptr_id);
         modules[i].config = update->ops[i].config;
@@ -105,7 +75,7 @@ void MorphPlanVoice::cheap_update(MorphPlanSynth::UpdateP update) {
     configure_modules();
 }
 
-double MorphPlanVoice::control_input(double value, MorphOperator::ControlType ctype) {
+double MorphPlanVoice::control_input(double value, MorphOperator::ControlType ctype, MorphOperatorModule*) {
     switch (ctype) {
         case MorphOperator::CONTROL_GUI:
             return value;
@@ -128,10 +98,10 @@ double MorphPlanVoice::control_input(double value, MorphOperator::ControlType ct
     }
 }
 
-void MorphPlanVoice::set_control_input(unsigned int i, double value) {
+void MorphPlanVoice::set_control_input(int i, double value) {
     assert(i >= 0 && i < MorphPlan::N_CONTROL_INPUTS);
 
-    m_control_input[i] = value;
+    m_control_input[(size_t)i] = value;
 }
 
 double MorphPlanVoice::control_output(unsigned int i) {
@@ -160,4 +130,14 @@ float MorphPlanVoice::mix_freq() const {
 
 MorphPlanSynth* MorphPlanVoice::morph_plan_synth() const {
     return m_morph_plan_synth;
+}
+
+void MorphPlanVoice::update_shared_state(const TimeInfo& time_info) {
+    for (size_t i = 0; i < modules.size(); i++)
+        modules[i].module->update_shared_state(time_info);
+}
+
+void MorphPlanVoice::reset_value(const TimeInfo& time_info) {
+    for (size_t i = 0; i < modules.size(); i++)
+        modules[i].module->reset_value(time_info);
 }
